@@ -381,7 +381,8 @@ body{display:flex;flex-direction:column;align-items:center}
 
     <!-- NOME COM ACOMPANHANTE -->
     <div class="companion-box" id="companionBox">
-      <p class="comp-note">Um código conjunto será gerado para os dois.</p>
+      <p class="comp-note">Indique o seu nome e o do seu acompanhante. Um código conjunto será gerado para os dois.</p>
+      <input class="input-field" id="guestNameDuo" type="text" placeholder="O seu nome completo" style="margin-bottom:8px">
       <input class="input-field" id="companionName" type="text" placeholder="Nome completo do acompanhante" style="margin-bottom:0">
     </div>
 
@@ -455,7 +456,6 @@ body{display:flex;flex-direction:column;align-items:center}
     <div id="paymentSummary" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:14px 16px;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.7;text-align:left;line-height:1.9"></div>
     <div id="rsvpForm" style="width:100%;display:flex;flex-direction:column;gap:12px">
       <input class="input-field" id="guestPhone" type="tel" placeholder="WhatsApp / Telemóvel">
-      <input class="input-field" id="guestEmail" type="email" placeholder="E-mail (opcional)">
       <button class="confirm-btn" onclick="submitRSVP()">Confirmar Presença & Gerar Código</button>
     </div>
     <div class="success-msg" id="successMsg">
@@ -717,41 +717,52 @@ function copyText(btn,text){
   });
 }
 
-function sendToSheets(name,phone,email,companion,pessoas,zone,drinks,amount,payment,code){
+function sendToSheets(name,phone,companion,pessoas,zone,drinks,amount,payment,code){
   var payload={
     timestamp:new Date().toLocaleString('pt-MZ'),
-    name:name,phone:phone,email:email||'',
-    companion:companion||'',pessoas:pessoas,
-    zone:zone,drinks:drinks,amount:amount,
-    payment:payment,code:code
+    name:name,
+    phone:phone,
+    companion:companion||'—',
+    pessoas:pessoas,
+    zone:zone,
+    drinks:drinks,
+    amount:amount,
+    payment:payment,
+    code:code
   };
-  fetch('https://script.google.com/macros/s/AKfycbzgEdfLicqjgff0JiCd6UPTV6I_p4ZYVQDrynzR_dSTr-UMUK6VD8udovDWDdS1cuuS/exec',{
-    method:'POST',mode:'no-cors',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(payload)
-  }).catch(function(){});
+  var url='https://script.google.com/macros/s/AKfycbzgEdfLicqjgff0JiCd6UPTV6I_p4ZYVQDrynzR_dSTr-UMUK6VD8udovDWDdS1cuuS/exec';
+  var encoded=Object.keys(payload).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(payload[k]);}).join('&');
+  fetch(url+'?'+encoded,{method:'GET',mode:'no-cors'}).catch(function(){});
 }
 
 function submitRSVP(){
   const phone=document.getElementById('guestPhone').value.trim();
-  const soloName=(document.getElementById('soloName')||{value:''}).value.trim();
-  const comp=withCompanion?(document.getElementById('companionName').value.trim()||''):'';
-  if(!soloName){alert('Por favor, insira o seu nome.');goTo(6);return;}
-  if(!phone){alert('Por favor, insira o seu telemóvel.');return;}
-  const n=soloName.slice(0,2).toUpperCase().replace(/\s/g,'');
+  var guestName='';
+  var comp='';
+  if(withCompanion){
+    guestName=(document.getElementById('guestNameDuo')||{value:''}).value.trim();
+    comp=(document.getElementById('companionName')||{value:''}).value.trim();
+    if(!guestName){alert('Por favor, insira o seu nome.');return;}
+    if(!comp){alert('Por favor, insira o nome do seu acompanhante.');return;}
+  } else {
+    guestName=(document.getElementById('soloName')||{value:''}).value.trim();
+    if(!guestName){alert('Por favor, insira o seu nome.');return;}
+  }
+  if(!phone){alert('Por favor, insira o seu WhatsApp / Telemóvel.');return;}
+  const n=guestName.slice(0,2).toUpperCase().replace(/\s/g,'');
   const code=n+'-'+(selectedZoneCode||'GE')+'-'+Math.floor(1000+Math.random()*9000);
   document.getElementById('accessCode').textContent=code;
   document.getElementById('successSubText').textContent=
-    withCompanion&&comp?'Bem-vindos à festa: '+soloName+' & '+comp:'Seja bem-vindo(a), '+soloName+'. A sua noite começa aqui.';
+    withCompanion&&comp?'Bem-vindos à festa: '+guestName+' & '+comp:'Seja bem-vindo(a), '+guestName+'. A sua noite começa aqui.';
   document.getElementById('rsvpForm').style.display='none';
   document.getElementById('successMsg').classList.add('show');
-  window._code=code;window._name=soloName;window._comp=comp;window._phone=phone;
+  window._code=code;window._name=guestName;window._comp=comp;window._phone=phone;
   var drinks=[];
   document.querySelectorAll('.drink-card.selected').forEach(function(c){
     var dn=c.querySelector('.drink-name').textContent,qty=c.querySelector('.qty-val').textContent,brand=c.querySelector('.brand-input').value;
     drinks.push(dn+(brand?' ('+brand+')':'')+' x'+qty);
   });
-  sendToSheets(soloName,phone,document.getElementById('guestEmail').value.trim(),comp,withCompanion?'2 pessoas':'1 pessoa',selectedZone||'—',drinks.join(', ')||'—',selectedAmount,selectedPayment,code);
+  sendToSheets(guestName,phone,comp,withCompanion?'2 pessoas':'1 pessoa',selectedZone||'—',drinks.join(', ')||'—',selectedAmount,selectedPayment,code);
 }
 
 function shareWhatsApp(){
