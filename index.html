@@ -211,6 +211,15 @@ body{display:flex;flex-direction:column;align-items:center}
       <p>⚠️ Ao clicar abaixo, uma tentativa será utilizada. Este convite não pode ser partilhado com terceiros.</p>
     </div>
     <button class="access-btn" id="accessBtn" onclick="tryAccess()">Abrir o Meu Convite</button>
+
+    <!-- ACESSO ADMIN OCULTO -->
+    <div style="margin-top:24px;width:100%;border-top:1px solid #1a1a1a;padding-top:16px">
+      <p style="font-size:9px;letter-spacing:2px;color:var(--off-white);opacity:.2;text-transform:uppercase;text-align:center;margin-bottom:8px">Acesso Organizador</p>
+      <input type="password" id="adminPass" placeholder="Palavra-passe" style="width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:Montserrat,sans-serif;font-size:12px;padding:10px 14px;outline:none;text-align:center;letter-spacing:2px" onkeydown="if(event.key==='Enter')adminAccess()">
+      <button onclick="adminAccess()" style="width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:Montserrat,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:6px;transition:all .3s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='#2a2a2a'">Entrar</button>
+      <p id="adminErr" style="display:none;font-size:10px;color:#C97A4C;text-align:center;margin-top:6px;letter-spacing:1px">Palavra-passe incorrecta</p>
+    </div>
+
     <div class="blocked-msg" id="blockedMsg">
       <div style="font-size:40px">🚫</div>
       <p class="block-title" style="color:#C97A4C">Acesso Bloqueado</p>
@@ -260,7 +269,7 @@ body{display:flex;flex-direction:column;align-items:center}
       <div class="cd-sep">·</div>
       <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Min</div></div>
     </div>
-    <button class="location-btn">📍 UPsen Garden</button>
+    <button class="location-btn">📍 Upsen Garden</button>
     <div class="fireplace-notice">
       <div style="font-size:20px;margin-bottom:8px">🔥</div>
       <p>Estaremos no inverno,<br>mas a nossa noite será aquecida<br>por uma lareira acesa<br>e uma atmosfera inesquecível.</p>
@@ -306,7 +315,7 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="section-wrap" style="padding-top:48px">
     <p class="invite-label">Personalize a Sua Experiência</p>
     <p class="section-title">Área de Consumo</p>
-    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Selecione as bebidas, indique a marca, a quantidade e a unidade (unidade, caixa ou embalagem). Pode adicionar a mesma bebida várias vezes com marcas diferentes.</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Indique as suas preferências de bebidas para que possamos preparar tudo para si. Não há qualquer custo — é apenas para organização.</p>
 
     <div class="drink-list" id="drinkList">
       <!-- gerado dinamicamente -->
@@ -554,20 +563,13 @@ function addEntry(drinkId){
   const drinkName=DRINKS.find(d=>d.id===drinkId).name;
   entry.innerHTML=`
     <button class="remove-entry" onclick="removeEntry('${drinkId}','${eid}')" title="Remover">✕</button>
-    <p class="entry-label">Marca / Tipo</p>
+    <p class="entry-label">Marca preferida (opcional)</p>
     <input class="entry-input" id="brand-${eid}" type="text" placeholder="Ex: Heineken, Moët, Compal...">
     <div class="qty-row" style="margin-top:10px">
       <span class="qty-label">Quantidade</span>
       <button class="qty-btn" onclick="changeEntryQty('${eid}',-1)">−</button>
       <span class="qty-val" id="qty-${eid}">1</span>
       <button class="qty-btn" onclick="changeEntryQty('${eid}',1)">+</button>
-      <select class="unit-select" id="unit-${eid}">
-        <option value="unidade(s)">Unidade(s)</option>
-        <option value="caixa(s)">Caixa(s)</option>
-        <option value="embalagem(ns)">Embalagem(ns)</option>
-        <option value="garrafa(s)">Garrafa(s)</option>
-        <option value="lata(s)">Lata(s)</option>
-      </select>
     </div>`;
   entriesDiv.insertBefore(entry,addBtn);
 }
@@ -596,8 +598,7 @@ function getDrinksForMessage(){
     drinkEntries[d.id].forEach(eid=>{
       const brand=(document.getElementById('brand-'+eid)||{}).value||'';
       const qty=(document.getElementById('qty-'+eid)||{}).textContent||'1';
-      const unit=(document.getElementById('unit-'+eid)||{}).value||'unidade(s)';
-      lines.push(d.name+(brand?' ('+brand+')':'')+' — '+qty+' '+unit);
+      lines.push(d.name+(brand?' — '+brand:'')+' ('+qty+'x)');
     });
   });
   return lines.length?lines.join('\n'):null;
@@ -606,6 +607,22 @@ function getDrinksForMessage(){
 // ── acesso ──
 function getA(){return parseInt(localStorage.getItem('adj31_a')||'0');}
 function saveA(n){localStorage.setItem('adj31_a',n);}
+
+function adminAccess(){
+  const pass=document.getElementById('adminPass').value;
+  const err=document.getElementById('adminErr');
+  // Palavra-passe secreta — muda para a que quiseres
+  if(pass==='Abel2026'||pass==='Marcia2026'){
+    localStorage.setItem('adj31_admin','1');
+    document.getElementById('bloqueio').classList.remove('active');
+    document.getElementById('s1').classList.add('active');
+    cur=1;
+  } else {
+    err.style.display='block';
+    document.getElementById('adminPass').value='';
+    setTimeout(function(){err.style.display='none';},2000);
+  }
+}
 function initAccessScreen(){
   const used=getA(),left=MAX-used;
   document.querySelectorAll('.attempt-dot').forEach((d,i)=>{d.classList.remove('active','used');i<left?d.classList.add('active'):d.classList.add('used');});
@@ -771,7 +788,7 @@ function shareWhatsApp(){
     '🎉 *Confirmação — Abel Dengo Jr 31 Anos*\n\n'+
     '👤 '+(window._name||'')+(window._comp?' & '+window._comp:'')+'\n'+
     '👥 '+(withCompanion?'2 pessoas':'1 pessoa')+'\n'+
-    '📅 09 Maio 2026 · 20h00\n📍 UPsen Garden\n🌿 '+(selectedZone||'—')+'\n\n'+
+    '📅 09 Maio 2026 · 20h00\n📍 Upsen Garden\n🌿 '+(selectedZone||'—')+'\n\n'+
     '🍹 *Consumo:*\n'+(drinks||'Não especificado')+'\n\n'+
     '💰 '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'\n\n'+
     '🔐 *Código: '+(window._code||'---')+'*\n\n'+
