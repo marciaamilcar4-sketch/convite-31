@@ -215,7 +215,7 @@ body{display:flex;flex-direction:column;align-items:center}
       <div style="font-size:40px">🚫</div>
       <p class="block-title" style="color:#C97A4C">Acesso Bloqueado</p>
       <p class="block-text">Esgotaste as 3 tentativas. Contacta o anfitrião para mais informações.</p>
-      <button class="access-btn" style="background:transparent;border:1px solid #C97A4C;color:#C97A4C" onclick="window.open('https://wa.me/258843795522','_blank')">Contactar via WhatsApp</button>
+      <button class="access-btn" style="background:transparent;border:1px solid #C97A4C;color:#C97A4C" onclick="window.open('https://wa.me/258873795522','_blank')">Contactar via WhatsApp</button>
     </div>
   </div>
 </div>
@@ -468,8 +468,15 @@ body{display:flex;flex-direction:column;align-items:center}
       </div>
       <p style="font-size:10px;color:var(--off-white);opacity:.3;letter-spacing:2px;text-transform:uppercase;margin-top:4px">Apresente na entrada · 09.05.2026</p>
       <div style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:12px 16px;margin-top:8px;text-align:left">
-        <p style="font-size:10px;letter-spacing:1px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:6px">Próximo Passo</p>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.6;line-height:1.7">Envie o comprovativo do presente + este código para o WhatsApp do anfitrião para finalizar o cadastro.</p>
+        <p style="font-size:10px;letter-spacing:1px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:6px">Próximo Passo — Importante</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.7;line-height:1.9">
+          Efectue a transferência do presente para:<br><br>
+          <strong style="color:var(--gold)">Abel Alfredo Dengo Junior</strong><br><br>
+          📱 <strong style="color:var(--off-white)">M-Pesa:</strong> 843 795 522<br>
+          💳 <strong style="color:var(--off-white)">e-Mola:</strong> 873 795 522<br><br>
+          Após a transferência, envie o <strong style="color:var(--gold)">comprovativo + o seu código acima</strong> para o WhatsApp <strong style="color:var(--off-white)">873 795 522</strong> para confirmar o cadastro.<br><br>
+          <em style="font-size:12px;opacity:.5">O cadastro só é válido após confirmação pelo anfitrião. Verifique sempre o nome do destinatário antes de transferir.</em>
+        </p>
       </div>
       <button class="nav-btn" style="margin-top:8px;width:100%" onclick="shareWhatsApp()">Enviar Comprovativo via WhatsApp →</button>
     </div>
@@ -759,7 +766,7 @@ function shareWhatsApp(){
     '🔐 *Código: '+(window._code||'---')+'*\n\n'+
     '_Segue em anexo o comprovativo do presente._'
   );
-  window.open('https://wa.me/258843795522?text='+msg,'_blank');
+  window.open('https://wa.me/258873795522?text='+msg,'_blank');
 }
 
 function updateCountdown(){
