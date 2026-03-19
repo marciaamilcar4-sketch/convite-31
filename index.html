@@ -7,20 +7,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--gold:#C9A84C;--gold-light:#E8C96A;--gold-dark:#9A7A2E;--black:#0A0A0A;--off-white:#F5F0E8;--gray:#2A2A2A}
+:root{--gold:#C9A84C;--gold-light:#E8C96A;--gold-dark:#9A7A2E;--black:#0A0A0A;--off-white:#F5F0E8}
 html,body{width:100%;min-height:100%;background:#0A0A0A;font-family:'Montserrat',sans-serif;overflow-x:hidden}
 body{display:flex;flex-direction:column;align-items:center}
-
 .screen{width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px 60px;opacity:0;transition:opacity .6s;position:absolute;top:0;left:0;pointer-events:none}
 .screen.active{opacity:1;pointer-events:all;position:relative}
 
+/* BLOQUEIO */
+#bloqueio{background:#0A0A0A;justify-content:center;align-items:center;text-align:center}
+.block-box{max-width:340px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.block-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);font-weight:300;letter-spacing:2px}
+.block-text{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.6;line-height:1.8;font-style:italic}
+.attempts-display{display:flex;gap:12px;margin:8px 0}
+.attempt-dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--gold);transition:all .3s}
+.attempt-dot.used{background:transparent;border-color:#3a2a0a;opacity:.3}
+.attempt-dot.active{background:var(--gold)}
+.warn-box{border:1px solid #8B4A2A;background:#1a0d08;padding:14px 20px;width:100%}
+.warn-box p{font-size:11px;color:#C97A4C;letter-spacing:.5px;line-height:1.7;text-align:center}
+.access-btn{background:var(--gold);color:var(--black);border:none;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:all .3s;width:100%}
+.access-btn:hover{background:var(--gold-light)}
+.blocked-msg{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.blocked-msg.show{display:flex}
+
+/* ENVELOPE */
 #s1{background:radial-gradient(ellipse at 50% 30%,#1a1209 0%,#0A0A0A 70%);justify-content:center}
 .env-wrap{display:flex;flex-direction:column;align-items:center;gap:32px}
 .pre-title{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;opacity:.7}
 .big-name{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,8vw,64px);font-weight:300;color:var(--off-white);letter-spacing:2px;text-align:center;line-height:1.1}
 .big-name span{color:var(--gold);font-style:italic}
 .age-line{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);letter-spacing:6px;text-transform:uppercase;font-weight:300}
-
 .envelope{position:relative;width:min(340px,85vw);height:min(230px,58vw);cursor:pointer;margin:8px 0}
 .env-body{width:100%;height:100%;background:linear-gradient(160deg,#1C1208,#2A1E0A);border:1px solid #3a2e14;border-radius:4px;position:relative;overflow:visible}
 .env-flap{position:absolute;top:0;left:0;width:100%;height:50%;clip-path:polygon(0 0,100% 0,50% 100%);background:linear-gradient(180deg,#1C1208,#251A08);border-bottom:1px solid #3a2e14;transform-origin:top center;transition:transform .6s cubic-bezier(.4,0,.2,1);z-index:2}
@@ -31,11 +46,11 @@ body{display:flex;flex-direction:column;align-items:center}
 .seal{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);width:56px;height:56px;z-index:10}
 .seal-circle{width:56px;height:56px;background:radial-gradient(circle at 35% 35%,#E8C96A,#C9A84C,#9A7A2E);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:#3a2200;letter-spacing:1px;box-shadow:0 2px 12px rgba(201,168,76,.4);border:1px solid #E8C96A}
 .env-label{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--gold);letter-spacing:3px;opacity:.6;text-align:center;position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-style:italic;white-space:nowrap}
-
 .open-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:14px 36px;cursor:pointer;transition:all .3s;margin-top:16px}
 .open-btn:hover{background:var(--gold);color:var(--black)}
 .hint{font-size:11px;color:var(--gold);opacity:.4;letter-spacing:2px;text-transform:uppercase;margin-top:8px}
 
+/* CAPA */
 #s2{background:#0A0A0A;padding-top:0}
 .hero{width:100%;max-width:480px;padding:60px 32px 40px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
 .divider-gold{width:60px;height:1px;background:var(--gold);opacity:.5}
@@ -50,46 +65,62 @@ body{display:flex;flex-direction:column;align-items:center}
 .dress-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:4px 0}
 .dress-pill{border:1px solid #2a2a2a;padding:10px 18px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--off-white);opacity:.7}
 .dress-pill span{color:var(--gold);margin-right:6px}
+.location-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:14px 32px;cursor:pointer;transition:all .3s}
+.location-btn:hover{background:var(--gold);color:var(--black)}
 .nav-btn{background:var(--gold);color:var(--black);border:none;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:all .3s;margin-top:8px}
 .nav-btn:hover{background:var(--gold-light)}
-.nav-btn.outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
-.nav-btn.outline:hover{background:var(--gold);color:var(--black)}
-
 .countdown-wrap{display:flex;gap:16px;justify-content:center;margin:8px 0}
 .cd-box{text-align:center;min-width:52px}
 .cd-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);font-weight:300;line-height:1}
 .cd-label{font-size:9px;letter-spacing:3px;color:var(--off-white);opacity:.4;text-transform:uppercase;margin-top:4px}
 .cd-sep{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);opacity:.3;align-self:flex-start;padding-top:4px}
 
-#s3{background:#0A0A0A}
+/* SECÇÕES GERAIS */
 .section-wrap{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
 .section-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);font-weight:300;letter-spacing:2px}
 .section-sub{font-size:11px;letter-spacing:3px;color:var(--off-white);opacity:.4;text-transform:uppercase}
-.zones-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.zone-card{background:#111;border:1px solid #1e1e1e;padding:20px 14px;text-align:center;cursor:pointer;transition:all .3s;position:relative}
+#s3{background:#0A0A0A}
+.zones-grid{width:100%;display:grid;grid-template-columns:1fr;gap:10px}
+.zone-card{background:#111;border:1px solid #1e1e1e;padding:24px 20px;text-align:center;cursor:pointer;transition:all .3s;position:relative}
 .zone-card:hover,.zone-card.selected{border-color:var(--gold);background:#161208}
-.zone-card.selected::after{content:'✓';position:absolute;top:8px;right:10px;color:var(--gold);font-size:12px}
-.zone-icon{font-size:22px;margin-bottom:8px}
-.zone-name{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--off-white);font-weight:400;margin-bottom:4px}
-.zone-desc{font-size:10px;color:var(--off-white);opacity:.4;letter-spacing:1px;line-height:1.5}
+.zone-card.selected::after{content:'✓';position:absolute;top:12px;right:16px;color:var(--gold);font-size:14px}
+.zone-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--off-white);font-weight:400;margin-bottom:6px}
+.zone-desc{font-size:11px;color:var(--off-white);opacity:.4;letter-spacing:1px;line-height:1.5}
 
+/* CONSUMO */
 #s4{background:#0A0A0A}
-.drink-grid{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.drink-card{background:#111;border:1px solid #1e1e1e;padding:12px 8px 10px;text-align:center;cursor:pointer;transition:all .3s;position:relative}
-.drink-card:hover{border-color:var(--gold-dark)}
-.drink-card.selected{border-color:var(--gold);background:#161208}
-.drink-card.selected::after{content:'✓';position:absolute;top:5px;right:7px;color:var(--gold);font-size:10px}
-.drink-emoji{font-size:18px;margin-bottom:5px}
-.drink-name{font-size:10px;color:var(--off-white);opacity:.7;letter-spacing:.5px}
-.qty-row{display:none;align-items:center;justify-content:center;gap:8px;margin-top:7px}
-.qty-btn{width:24px;height:24px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.qty-btn:hover{background:var(--gold);color:var(--black)}
-.qty-val{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--off-white);min-width:18px;text-align:center}
-.brand-wrap{display:none;margin-top:6px;padding:0 2px}
-.brand-input{width:100%;background:transparent;border:0;border-bottom:1px solid #3a2e14;color:var(--off-white);font-size:10px;letter-spacing:.5px;padding:4px 0;text-align:center;outline:none;font-family:'Montserrat',sans-serif}
-.brand-input::placeholder{color:rgba(255,255,255,.2);font-size:9px}
-.brand-input:focus{border-bottom-color:var(--gold)}
+.drink-list{width:100%;display:flex;flex-direction:column;gap:10px}
+.drink-row{background:#111;border:1px solid #1e1e1e;padding:14px;transition:border .3s}
+.drink-row.selected{border-color:var(--gold);background:#161208}
+.drink-header{display:flex;align-items:center;gap:12px;cursor:pointer}
+.drink-emoji{font-size:20px;width:28px;text-align:center;flex-shrink:0}
+.drink-name-label{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--off-white);flex:1}
+.drink-toggle-btn{width:28px;height:28px;background:transparent;border:1px solid #2a2a2a;color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-family:'Montserrat',sans-serif}
+.drink-toggle-btn:hover{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.drink-toggle-btn.added{background:var(--gold);color:var(--black);border-color:var(--gold)}
 
+/* entradas de bebida individuais */
+.drink-entries{display:none;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #1e1e1e}
+.drink-entries.show{display:flex}
+.drink-entry{background:#0f0d08;border:1px solid #2a2a2a;padding:10px 12px;position:relative}
+.entry-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.entry-label{font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.5;text-transform:uppercase;margin-bottom:4px}
+.entry-input{flex:1;min-width:100px;background:transparent;border:0;border-bottom:1px solid #2a2a2a;color:var(--off-white);font-size:12px;padding:4px 0;outline:none;font-family:'Montserrat',sans-serif}
+.entry-input::placeholder{color:rgba(255,255,255,.2);font-size:11px}
+.entry-input:focus{border-bottom-color:var(--gold)}
+.unit-select{background:#0f0d08;border:1px solid #2a2a2a;color:var(--off-white);font-size:11px;padding:4px 6px;outline:none;font-family:'Montserrat',sans-serif;cursor:pointer;flex-shrink:0}
+.unit-select option{background:#0f0d08}
+.qty-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qty-label{font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.5;text-transform:uppercase}
+.qty-btn{width:26px;height:26px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.qty-btn:hover{background:var(--gold);color:var(--black)}
+.qty-val{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--off-white);min-width:24px;text-align:center}
+.remove-entry{position:absolute;top:8px;right:8px;background:transparent;border:none;color:#555;font-size:14px;cursor:pointer;padding:2px 6px;transition:color .2s}
+.remove-entry:hover{color:#C97A4C}
+.add-entry-btn{background:transparent;border:1px dashed #2a2a2a;color:var(--gold);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:10px;cursor:pointer;transition:all .3s;width:100%}
+.add-entry-btn:hover{border-color:var(--gold);background:#161208}
+
+/* MENU */
 #s5{background:#0A0A0A}
 .menu-list{width:100%;display:flex;flex-direction:column;gap:8px}
 .menu-item{display:flex;align-items:center;gap:14px;padding:14px 16px;background:#111;border:1px solid #1a1a1a}
@@ -97,69 +128,108 @@ body{display:flex;flex-direction:column;align-items:center}
 .menu-item-text{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--off-white);font-weight:300}
 .category-label{font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin:12px 0 4px;align-self:flex-start}
 
+/* PRESENTE */
 #s6{background:#0A0A0A}
 .gift-intro{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--off-white);opacity:.6;line-height:1.8;text-align:center;max-width:320px}
+.companion-toggle{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0}
+.comp-btn{background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Cormorant Garamond',serif;font-size:15px;padding:18px 10px;cursor:pointer;transition:all .3s;text-align:center;position:relative;line-height:1.4}
+.comp-btn:hover,.comp-btn.selected{border-color:var(--gold);color:var(--gold);background:#161208}
+.comp-btn.selected::after{content:'✓';position:absolute;top:6px;right:10px;font-size:11px;color:var(--gold)}
+.comp-sub{font-size:10px;opacity:.5;display:block;margin-top:5px;font-family:'Montserrat',sans-serif;letter-spacing:1px;color:var(--off-white)}
+.companion-box{display:none;width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:16px}
+.companion-box.show{display:block}
+.comp-note{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--off-white);opacity:.5;line-height:1.7;margin-bottom:12px;text-align:center}
+.input-field{width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Montserrat',sans-serif;font-size:13px;padding:14px 16px;outline:none;text-align:center;transition:border .3s;margin-bottom:8px}
+.input-field:focus{border-color:var(--gold)}
+.input-field::placeholder{color:rgba(255,255,255,.2);font-size:12px;letter-spacing:1px}
+.min-value-notice{width:100%;background:#161208;border:1px solid #2a2a2a;padding:14px;text-align:center;margin:4px 0}
+.min-value-notice p{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.7;line-height:1.7}
+.min-value-notice strong{color:var(--gold);font-style:italic}
 .amount-grid{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0}
 .amount-btn{background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Cormorant Garamond',serif;font-size:17px;padding:16px 8px;cursor:pointer;transition:all .3s;text-align:center}
 .amount-btn:hover,.amount-btn.selected{border-color:var(--gold);color:var(--gold);background:#161208}
 .amount-btn.custom-btn{grid-column:1/-1;font-size:12px;letter-spacing:2px;font-family:'Montserrat',sans-serif;text-transform:uppercase}
+.amount-btn.disabled-amt{opacity:.2;cursor:not-allowed;border-color:#111;color:#333;pointer-events:none}
 .custom-input{width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Cormorant Garamond',serif;font-size:18px;padding:14px 16px;text-align:center;outline:none;display:none;margin-top:-8px}
 .custom-input:focus{border-color:var(--gold)}
 .custom-input::placeholder{color:rgba(255,255,255,.2)}
-
 .payment-card{background:#111;border:1px solid #1e1e1e;padding:16px;margin-bottom:8px;transition:border .3s}
 .payment-card.chosen{border-color:var(--gold)}
-.payment-title{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.payment-title{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
 .payment-detail{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.8;margin:4px 0;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.payment-detail span{font-size:10px;color:var(--off-white);opacity:.4;letter-spacing:1px}
+.payment-detail span.lbl{font-size:10px;color:var(--off-white);opacity:.4;letter-spacing:1px;font-family:'Montserrat',sans-serif}
+.payment-name{font-size:11px;color:var(--off-white);opacity:.5;letter-spacing:.5px;margin-top:4px;font-family:'Montserrat',sans-serif}
 .copy-btn{background:transparent;border:1px solid #2a2a2a;color:var(--gold);font-size:9px;letter-spacing:1px;padding:4px 8px;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:'Montserrat',sans-serif;text-transform:uppercase}
-.copy-btn:hover{background:var(--gold);color:var(--black);border-color:var(--gold)}
-.copy-btn.copied{background:var(--gold);color:var(--black);border-color:var(--gold)}
-.choose-pay-btn{width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:12px;cursor:pointer;transition:all .3s;margin-top:8px;display:flex;justify-content:center;align-items:center;gap:8px}
+.copy-btn:hover,.copy-btn.copied{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.choose-pay-btn{width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:12px;cursor:pointer;transition:all .3s;margin-top:8px}
 .choose-pay-btn.chosen{border-color:var(--gold);color:var(--gold);background:#161208}
-.note-box{border-left:2px solid var(--gold);padding:12px 16px;background:#0f0d08;max-width:380px;width:100%}
+.note-box{border-left:2px solid var(--gold);padding:12px 16px;background:#0f0d08;width:100%}
 .note-box p{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--off-white);opacity:.6;line-height:1.7}
-.warn-box{border:1px solid #8B4A2A;background:#1a0d08;padding:14px 16px;width:100%}
-.warn-box p{font-size:11px;color:#C97A4C;letter-spacing:.5px;line-height:1.7;text-align:center}
 
+/* RSVP */
 #s7{background:#0A0A0A}
 .rsvp-wrap{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
-.input-field{width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Montserrat',sans-serif;font-size:13px;padding:14px 16px;outline:none;text-align:center;transition:border .3s}
-.input-field:focus{border-color:var(--gold)}
-.input-field::placeholder{color:rgba(255,255,255,.2);font-size:12px;letter-spacing:1px}
 .confirm-btn{width:100%;background:var(--gold);color:var(--black);border:none;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:18px;cursor:pointer;transition:all .3s;margin-top:8px}
 .confirm-btn:hover{background:var(--gold-light)}
 .success-msg{display:none;text-align:center;padding:8px 0}
 .success-msg.show{display:flex;flex-direction:column;align-items:center;gap:12px}
 .success-icon{width:60px;height:60px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
 .success-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);font-weight:300}
-.success-sub{font-size:11px;letter-spacing:2px;color:var(--off-white);opacity:.5;text-transform:uppercase;line-height:1.8;max-width:280px}
+.success-sub{font-size:13px;font-family:'Cormorant Garamond',serif;color:var(--off-white);opacity:.6;line-height:1.7;max-width:300px;font-style:italic}
 .code-box{border:1px solid var(--gold);padding:16px 32px;margin-top:8px;background:#0f0d08}
 .code-label{font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:4px}
 .code-value{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--gold);letter-spacing:8px}
-
 .bottom-nav{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:16px}
 .back-link{font-size:10px;letter-spacing:2px;color:var(--off-white);opacity:.3;text-transform:uppercase;cursor:pointer;background:none;border:none;transition:opacity .3s}
 .back-link:hover{opacity:.7}
 .progress{display:flex;gap:8px;margin:16px 0 0}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--off-white);opacity:.15;transition:all .3s}
 .dot.active{background:var(--gold);opacity:1;width:20px;border-radius:3px}
+
+/* mensagem especial */
+.special-msg-box{border:1px solid var(--gold);padding:20px 24px;background:#0f0d08;max-width:360px;text-align:center}
+.special-msg-box p{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--gold);line-height:1.8;letter-spacing:.5px}
 </style>
 </head>
 <body>
 
-<!-- ══ S1: ENVELOPE ══ -->
-<div class="screen active" id="s1">
+<!-- BLOQUEIO -->
+<div class="screen active" id="bloqueio">
+  <div class="block-box">
+    <div style="font-size:40px">🔐</div>
+    <p style="font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;opacity:.7">Convite Exclusivo</p>
+    <p class="block-title">Abel Dengo Jr · 31</p>
+    <div style="height:1px;width:60px;background:var(--gold);opacity:.4"></div>
+    <p class="block-text">Este convite é pessoal e intransmissível, destinado a uma das <strong style="color:var(--gold)">50 pessoas</strong> seleccionadas. Tens apenas <strong style="color:var(--gold)">3 tentativas</strong> para aceder. Após esgotadas, o acesso será permanentemente bloqueado.</p>
+    <div class="attempts-display" id="attemptDots">
+      <div class="attempt-dot active"></div>
+      <div class="attempt-dot active"></div>
+      <div class="attempt-dot active"></div>
+    </div>
+    <p id="attemptsLeft" style="font-size:11px;letter-spacing:2px;color:var(--gold);opacity:.6;text-transform:uppercase">3 acessos disponíveis</p>
+    <div class="warn-box">
+      <p>⚠️ Ao clicar abaixo, uma tentativa será utilizada. Este convite não pode ser partilhado com terceiros.</p>
+    </div>
+    <button class="access-btn" id="accessBtn" onclick="tryAccess()">Abrir o Meu Convite</button>
+    <div class="blocked-msg" id="blockedMsg">
+      <div style="font-size:40px">🚫</div>
+      <p class="block-title" style="color:#C97A4C">Acesso Bloqueado</p>
+      <p class="block-text">Esgotaste as 3 tentativas. Contacta o anfitrião para mais informações.</p>
+      <button class="access-btn" style="background:transparent;border:1px solid #C97A4C;color:#C97A4C" onclick="window.open('https://wa.me/258843795522','_blank')">Contactar via WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- S1: ENVELOPE -->
+<div class="screen" id="s1">
   <div class="env-wrap">
     <p class="pre-title">Você está convidado</p>
     <h1 class="big-name">Abel Dengo <span>Jr</span></h1>
     <p class="age-line">31 Anos</p>
-    <div class="envelope" id="envelope" onclick="openEnvelope()">
+    <div class="envelope" onclick="openEnvelope()">
       <div class="env-body">
         <div class="env-flap" id="flap"></div>
-        <div class="env-left"></div>
-        <div class="env-right"></div>
-        <div class="env-bottom"></div>
+        <div class="env-left"></div><div class="env-right"></div><div class="env-bottom"></div>
         <div class="env-label">Abra aqui</div>
         <div class="seal"><div class="seal-circle">ADJ</div></div>
       </div>
@@ -169,7 +239,7 @@ body{display:flex;flex-direction:column;align-items:center}
   </div>
 </div>
 
-<!-- ══ S2: CAPA ══ -->
+<!-- S2: CAPA -->
 <div class="screen" id="s2">
   <div class="hero">
     <p class="invite-label">Uma noite especial</p>
@@ -177,9 +247,12 @@ body{display:flex;flex-direction:column;align-items:center}
     <div class="invite-name">31<em>Birthday</em></div>
     <div class="divider-gold"></div>
     <p class="invite-sub">A Night to Remember</p>
+    <div class="special-msg-box">
+      <p>"Este convite é especial e você faz parte das 50 pessoas que fazem parte da minha história."</p>
+    </div>
     <div style="height:1px;width:100%;background:#1a1a1a;margin:4px 0"></div>
     <p class="event-date-big">09 de Maio de 2026</p>
-    <p class="event-time">Sábado · 20:00h · Jardim</p>
+    <p class="event-time">Sábado · 20:00h</p>
     <div class="countdown-wrap">
       <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Dias</div></div>
       <div class="cd-sep">·</div>
@@ -187,6 +260,7 @@ body{display:flex;flex-direction:column;align-items:center}
       <div class="cd-sep">·</div>
       <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Min</div></div>
     </div>
+    <button class="location-btn">📍 UPsen Garden</button>
     <div class="fireplace-notice">
       <div style="font-size:20px;margin-bottom:8px">🔥</div>
       <p>Estaremos no inverno,<br>mas a nossa noite será aquecida<br>por uma lareira acesa<br>e uma atmosfera inesquecível.</p>
@@ -202,18 +276,22 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="progress"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 </div>
 
-<!-- ══ S3: AMBIENTES ══ -->
+<!-- S3: AMBIENTES -->
 <div class="screen" id="s3">
   <div class="section-wrap" style="padding-top:48px">
     <p class="invite-label">Escolha o Seu Espaço</p>
     <p class="section-title">Ambientes</p>
-    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:300px">Selecione o ambiente da sua preferência. O seu código de entrada será vinculado a esta escolha.</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:300px">O seu código de entrada será vinculado ao ambiente escolhido.</p>
     <div class="zones-grid">
-      <div class="zone-card" onclick="selectZone(this,'LS')"><div class="zone-icon">🕯</div><div class="zone-name">Lounge Sereno</div><div class="zone-desc">Ambiente calmo e intimista</div></div>
-      <div class="zone-card" onclick="selectZone(this,'CN')"><div class="zone-icon">🥂</div><div class="zone-name">Convívio & Networking</div><div class="zone-desc">Encontros e conversas</div></div>
-      <div class="zone-card" onclick="selectZone(this,'EX')"><div class="zone-icon">👑</div><div class="zone-name">Lounge Exclusivo</div><div class="zone-desc">Área VIP reservada</div></div>
-      <div class="zone-card" onclick="selectZone(this,'SE')"><div class="zone-icon">🌿</div><div class="zone-name">Lounge Sénior</div><div class="zone-desc">Conforto e distinção</div></div>
-      <div class="zone-card" onclick="selectZone(this,'EN')" style="grid-column:1/-1"><div class="zone-icon">🎵</div><div class="zone-name">Espaço de Entretenimento</div><div class="zone-desc">DJs · Dança · Surpresas</div></div>
+      <div class="zone-card" onclick="selectZone(this,'SN')">
+        <div class="zone-name">Sereno & Networking</div>
+        <div class="zone-desc">Ambiente calmo · Convívio · Encontros</div>
+      </div>
+      <div class="zone-card" onclick="selectZone(this,'EN')">
+        <div style="font-size:22px;margin-bottom:8px">🎵</div>
+        <div class="zone-name">Entretenimento</div>
+        <div class="zone-desc">DJs · Dança · Surpresas</div>
+      </div>
     </div>
     <div class="bottom-nav">
       <button class="nav-btn" onclick="goTo(4)">Área de Consumo →</button>
@@ -223,62 +301,15 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="progress"><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 </div>
 
-<!-- ══ S4: CONSUMO ══ -->
+<!-- S4: CONSUMO -->
 <div class="screen" id="s4">
   <div class="section-wrap" style="padding-top:48px">
     <p class="invite-label">Personalize a Sua Experiência</p>
     <p class="section-title">Área de Consumo</p>
-    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:300px">Selecione as suas bebidas, indique a quantidade e escreva a marca da sua preferência.</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Selecione as bebidas, indique a marca, a quantidade e a unidade (unidade, caixa ou embalagem). Pode adicionar a mesma bebida várias vezes com marcas diferentes.</p>
 
-    <div class="drink-grid">
-      <div class="drink-card" onclick="toggleDrink(this,'agua')">
-        <div class="drink-emoji">💧</div>
-        <div class="drink-name">Água</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Marca (ex: Vaquinha)" onclick="event.stopPropagation()"></div>
-      </div>
-      <div class="drink-card" onclick="toggleDrink(this,'refri')">
-        <div class="drink-emoji">🥤</div>
-        <div class="drink-name">Refrigerante</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Marca (ex: Coca-Cola)" onclick="event.stopPropagation()"></div>
-      </div>
-      <div class="drink-card" onclick="toggleDrink(this,'sumo')">
-        <div class="drink-emoji">🧃</div>
-        <div class="drink-name">Sumo</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Marca (ex: Compal)" onclick="event.stopPropagation()"></div>
-      </div>
-      <div class="drink-card" onclick="toggleDrink(this,'champanhe')">
-        <div class="drink-emoji">🍾</div>
-        <div class="drink-name">Champanhe</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Marca (ex: Moët)" onclick="event.stopPropagation()"></div>
-      </div>
-      <div class="drink-card" onclick="toggleDrink(this,'cerveja')">
-        <div class="drink-emoji">🍺</div>
-        <div class="drink-name">Cerveja</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Marca (ex: 2M)" onclick="event.stopPropagation()"></div>
-      </div>
-      <div class="drink-card" onclick="toggleDrink(this,'whisky')">
-        <div class="drink-emoji">🥃</div>
-        <div class="drink-name">Whisky</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Marca (ex: Johnnie)" onclick="event.stopPropagation()"></div>
-      </div>
-      <div class="drink-card" onclick="toggleDrink(this,'drinks')" style="grid-column:1/3">
-        <div class="drink-emoji">🍹</div>
-        <div class="drink-name">Drinks</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Tipo (ex: Mojito, Gin Tónico)" onclick="event.stopPropagation()"></div>
-      </div>
-      <div class="drink-card" onclick="toggleDrink(this,'outro')">
-        <div class="drink-emoji">➕</div>
-        <div class="drink-name">Outro</div>
-        <div class="qty-row"><button class="qty-btn" onclick="changeQty(event,this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(event,this,1)">+</button></div>
-        <div class="brand-wrap"><input class="brand-input" type="text" placeholder="Descreva" onclick="event.stopPropagation()"></div>
-      </div>
+    <div class="drink-list" id="drinkList">
+      <!-- gerado dinamicamente -->
     </div>
 
     <div class="bottom-nav">
@@ -289,31 +320,29 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="progress"><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 </div>
 
-<!-- ══ S5: MENU ══ -->
+<!-- S5: MENU -->
 <div class="screen" id="s5">
   <div class="section-wrap" style="padding-top:48px">
     <p class="invite-label">Gastronomia da Noite</p>
     <p class="section-title">Menu</p>
     <div class="menu-list">
-
-      <p class="category-label">Grelhados</p>
-      <div class="menu-item"><span class="menu-item-icon">🍖</span><span class="menu-item-text">Frango & Porco no Worse</span></div>
-      <div class="menu-item"><span class="menu-item-icon">🦐</span><span class="menu-item-text">Camarão Grelhado</span></div>
-      <div class="menu-item"><span class="menu-item-icon">🦑</span><span class="menu-item-text">Lulas Grelhadas</span></div>
-
-      <p class="category-label">Petiscos</p>
+      <p class="category-label">Entradas</p>
       <div class="menu-item"><span class="menu-item-icon">🥟</span><span class="menu-item-text">Chamussas</span></div>
       <div class="menu-item"><span class="menu-item-icon">🥟</span><span class="menu-item-text">Rissóis</span></div>
-      <div class="menu-item"><span class="menu-item-icon">🍢</span><span class="menu-item-text">Petiscos Variados</span></div>
-
+      <p class="category-label">Grelhados</p>
+      <div class="menu-item"><span class="menu-item-icon">🍗</span><span class="menu-item-text">Frango</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🍖</span><span class="menu-item-text">Porco</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🌭</span><span class="menu-item-text">Worse</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🍛</span><span class="menu-item-text">Babalaze</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🦐</span><span class="menu-item-text">Camarão</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🦑</span><span class="menu-item-text">Lulas</span></div>
       <p class="category-label">Pratos Quentes</p>
       <div class="menu-item"><span class="menu-item-icon">🍲</span><span class="menu-item-text">Sopa</span></div>
-      <div class="menu-item"><span class="menu-item-icon">🍛</span><span class="menu-item-text">Babalaze</span></div>
-      <div class="menu-item"><span class="menu-item-icon">🍚</span><span class="menu-item-text">Arroz Briane</span></div>
-
+      <div class="menu-item"><span class="menu-item-icon">🍢</span><span class="menu-item-text">Petiscos</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🍚</span><span class="menu-item-text">Arroz Biryani</span></div>
       <p class="category-label">Acompanhamentos</p>
-      <div class="menu-item"><span class="menu-item-icon">🥗</span><span class="menu-item-text">Saladas</span></div>
-
+      <div class="menu-item"><span class="menu-item-icon">🥗</span><span class="menu-item-text">Salada Fria</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🥙</span><span class="menu-item-text">Salada Mista</span></div>
     </div>
     <div class="bottom-nav">
       <button class="nav-btn" onclick="goTo(6)">Enviar Presente →</button>
@@ -323,21 +352,51 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="progress"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
 </div>
 
-<!-- ══ S6: PRESENTE ══ -->
+<!-- S6: PRESENTE -->
 <div class="screen" id="s6">
   <div class="section-wrap" style="padding-top:48px;max-width:420px">
     <p class="invite-label">Gesto de Carinho</p>
     <p class="section-title">Presente</p>
-    <p class="gift-intro">"Dependendo do amor que você sente por mim, e o merecimento em estar a degraus deste momento especial junto de mim e com pessoas que eu amo."</p>
+    <p class="gift-intro">"Dependendo do amor que você sente por mim, e o merecimento em estar a degraus deste momento especial junto de mim."</p>
 
-    <p class="section-sub" style="margin-top:4px">Escolha o Valor (MZN)</p>
+    <p class="section-sub" style="margin-top:8px">Vem sozinho(a) ou com acompanhante?</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Abrimos excepção para casais e pessoas em relacionamento.</p>
+
+    <div class="companion-toggle">
+      <button class="comp-btn selected" id="btn-solo" onclick="setCompanion(false)">
+        Sozinho(a)
+        <span class="comp-sub">A partir de 3.000 MZN</span>
+      </button>
+      <button class="comp-btn" id="btn-duo" onclick="setCompanion(true)">
+        Com Acompanhante
+        <span class="comp-sub">A partir de 7.000 MZN</span>
+      </button>
+    </div>
+
+    <!-- NOME SOLO -->
+    <div id="soloBox" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:16px">
+      <p class="comp-note" style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--off-white);opacity:.5;line-height:1.7;margin-bottom:12px;text-align:center">Insira o seu nome para que façamos parte da sua história nesta noite.</p>
+      <input class="input-field" id="soloName" type="text" placeholder="O seu nome completo" style="margin-bottom:0">
+    </div>
+
+    <!-- NOME COM ACOMPANHANTE -->
+    <div class="companion-box" id="companionBox">
+      <p class="comp-note">Um código conjunto será gerado para os dois.</p>
+      <input class="input-field" id="companionName" type="text" placeholder="Nome completo do acompanhante" style="margin-bottom:0">
+    </div>
+
+    <div class="min-value-notice">
+      <p id="minValueText">Valor mínimo: <strong>3.000 MZN</strong> — 1 pessoa</p>
+    </div>
+
+    <p class="section-sub">Escolha o Valor (MZN)</p>
     <div class="amount-grid">
-      <button class="amount-btn" onclick="selectAmount(this,3000)">3.000</button>
-      <button class="amount-btn" onclick="selectAmount(this,5000)">5.000</button>
-      <button class="amount-btn" onclick="selectAmount(this,7000)">7.000</button>
-      <button class="amount-btn" onclick="selectAmount(this,10000)">10.000</button>
-      <button class="amount-btn" onclick="selectAmount(this,13000)">13.000</button>
-      <button class="amount-btn" onclick="selectAmount(this,15000)">15.000</button>
+      <button class="amount-btn" id="amt-3000" onclick="selectAmount(this,3000)">3.000</button>
+      <button class="amount-btn" id="amt-5000" onclick="selectAmount(this,5000)">5.000</button>
+      <button class="amount-btn" id="amt-7000" onclick="selectAmount(this,7000)">7.000</button>
+      <button class="amount-btn" id="amt-10000" onclick="selectAmount(this,10000)">10.000</button>
+      <button class="amount-btn" id="amt-13000" onclick="selectAmount(this,13000)">13.000</button>
+      <button class="amount-btn" id="amt-15000" onclick="selectAmount(this,15000)">15.000</button>
       <button class="amount-btn custom-btn" onclick="showCustom()">Inserir Outro Valor →</button>
     </div>
     <input class="custom-input" id="customAmt" type="number" min="3000" placeholder="Mínimo 3.000 MZN" oninput="setCustomAmount(this.value)">
@@ -349,12 +408,13 @@ body{display:flex;flex-direction:column;align-items:center}
     <div class="payment-card" id="pay-mpesa">
       <div class="payment-title">📱 M-Pesa</div>
       <div class="payment-detail">
-        <span>Número</span>
+        <span class="lbl">Número</span>
         <div style="display:flex;align-items:center;gap:8px">
           <span style="color:var(--off-white);font-size:15px;opacity:.9">843 795 522</span>
           <button class="copy-btn" onclick="copyText(this,'843795522')">Copiar</button>
         </div>
       </div>
+      <p class="payment-name">Abel Alfredo Dengo Junior</p>
       <button class="choose-pay-btn" id="btn-mpesa" onclick="selectPayment('M-Pesa','pay-mpesa','btn-mpesa')">Pagar com M-Pesa →</button>
     </div>
 
@@ -362,39 +422,19 @@ body{display:flex;flex-direction:column;align-items:center}
     <div class="payment-card" id="pay-emola">
       <div class="payment-title">💳 e-Mola</div>
       <div class="payment-detail">
-        <span>Número</span>
+        <span class="lbl">Número</span>
         <div style="display:flex;align-items:center;gap:8px">
           <span style="color:var(--off-white);font-size:15px;opacity:.9">873 795 522</span>
           <button class="copy-btn" onclick="copyText(this,'873795522')">Copiar</button>
         </div>
       </div>
+      <p class="payment-name">Abel Alfredo Dengo Junior</p>
       <button class="choose-pay-btn" id="btn-emola" onclick="selectPayment('e-Mola','pay-emola','btn-emola')">Pagar com e-Mola →</button>
     </div>
 
-    <!-- BANCO -->
-    <div class="payment-card" id="pay-banco">
-      <div class="payment-title">🏦 Transferência Bancária</div>
-      <div class="payment-detail">
-        <span>NIB</span>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="color:var(--off-white);font-size:13px;opacity:.9">0992099317</span>
-          <button class="copy-btn" onclick="copyText(this,'0992099317')">Copiar</button>
-        </div>
-      </div>
-      <div class="payment-detail" style="margin-top:6px">
-        <span>IBAN</span>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="color:var(--off-white);font-size:11px;opacity:.9;letter-spacing:.5px">MZ59 0001 0000 0099 2099 3175 7</span>
-          <button class="copy-btn" onclick="copyText(this,'MZ59000100000099209931757')">Copiar</button>
-        </div>
-      </div>
-      <button class="choose-pay-btn" id="btn-banco" onclick="selectPayment('Banco','pay-banco','btn-banco')">Pagar por Transferência →</button>
-    </div>
-
     <div class="warn-box" style="margin-top:4px">
-      <p>⚠️ O cadastro e a entrada no evento só serão válidos após confirmação do envio do presente via WhatsApp. Prazo: 30 dias.</p>
+      <p>⚠️ O cadastro só é válido após confirmação do envio do presente via WhatsApp. Prazo: 30 dias.</p>
     </div>
-
     <div class="bottom-nav">
       <button class="nav-btn" id="rsvpNavBtn" onclick="goToRSVP()" disabled style="opacity:.4;cursor:not-allowed">Confirmar Presença →</button>
       <p id="payHint" style="font-size:10px;color:var(--gold);opacity:.5;letter-spacing:1px;text-align:center">Selecione um valor e método de pagamento</p>
@@ -404,194 +444,336 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="progress"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div></div>
 </div>
 
-<!-- ══ S7: RSVP ══ -->
+<!-- S7: RSVP -->
 <div class="screen" id="s7">
   <div class="rsvp-wrap" style="padding-top:48px">
     <p class="invite-label">Registo de Entrada</p>
     <p class="section-title">Confirmar Presença</p>
-
     <div class="note-box" style="text-align:left">
-      <p>Este convite é exclusivo e intransmissível. Só entrará quem tiver feito o cadastro e o envio do presente. Receberá o código de acesso e será direcionado ao ambiente escolhido.</p>
+      <p>Convite exclusivo e intransmissível. Só entrará quem tiver feito o cadastro e o envio do presente.</p>
     </div>
-
     <div id="paymentSummary" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:14px 16px;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.7;text-align:left;line-height:1.9"></div>
-
     <div id="rsvpForm" style="width:100%;display:flex;flex-direction:column;gap:12px">
-      <input class="input-field" id="guestName" type="text" placeholder="O seu nome completo">
       <input class="input-field" id="guestPhone" type="tel" placeholder="WhatsApp / Telemóvel">
       <input class="input-field" id="guestEmail" type="email" placeholder="E-mail (opcional)">
       <button class="confirm-btn" onclick="submitRSVP()">Confirmar Presença & Gerar Código</button>
     </div>
-
     <div class="success-msg" id="successMsg">
       <div class="success-icon">✓</div>
       <p class="success-title">Cadastro Confirmado</p>
-      <p class="success-sub">Seja bem-vindo à festa de Abel Dengo Jr.<br>Guarde o seu código de acesso.</p>
+      <p class="success-sub" id="successSubText"></p>
       <div class="code-box">
         <div class="code-label">Código de Entrada</div>
         <div class="code-value" id="accessCode">—</div>
       </div>
       <p style="font-size:10px;color:var(--off-white);opacity:.3;letter-spacing:2px;text-transform:uppercase;margin-top:4px">Apresente na entrada · 09.05.2026</p>
-      <div style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:12px 16px;margin-top:8px">
+      <div style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:12px 16px;margin-top:8px;text-align:left">
         <p style="font-size:10px;letter-spacing:1px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:6px">Próximo Passo</p>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.6;line-height:1.7;text-align:left">Envie o comprovativo do presente + este código para o WhatsApp do anfitrião para finalizar o cadastro.</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.6;line-height:1.7">Envie o comprovativo do presente + este código para o WhatsApp do anfitrião para finalizar o cadastro.</p>
       </div>
       <button class="nav-btn" style="margin-top:8px;width:100%" onclick="shareWhatsApp()">Enviar Comprovativo via WhatsApp →</button>
     </div>
-
     <button class="back-link" style="margin-top:16px" onclick="goTo(6)">← Voltar</button>
   </div>
   <div class="progress"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div></div>
 </div>
 
 <script>
-let currentScreen=1,selectedZone='',selectedZoneCode='',selectedAmount=0,selectedPayment='';
+// ── estado global ──
+let cur=1,selectedZone='',selectedZoneCode='',selectedAmount=0,selectedPayment='',withCompanion=false;
+const MAX=3;
 
-function goTo(n){
-  document.getElementById('s'+currentScreen).classList.remove('active');
-  document.getElementById('s'+n).classList.add('active');
-  currentScreen=n;window.scrollTo(0,0);
+// ── bebidas disponíveis ──
+const DRINKS=[
+  {id:'agua',emoji:'💧',name:'Água'},
+  {id:'refri',emoji:'🥤',name:'Refrigerante'},
+  {id:'sumo',emoji:'🧃',name:'Sumo'},
+  {id:'champanhe',emoji:'🍾',name:'Champanhe'},
+  {id:'cerveja',emoji:'🍺',name:'Cerveja'},
+  {id:'whisky',emoji:'🥃',name:'Whisky'},
+  {id:'drinks',emoji:'🍹',name:'Drinks'},
+  {id:'outro',emoji:'➕',name:'Outro'}
+];
+
+// ── entradas de bebida por tipo ──
+const drinkEntries={};
+
+function buildDrinkList(){
+  const list=document.getElementById('drinkList');
+  list.innerHTML='';
+  DRINKS.forEach(d=>{
+    drinkEntries[d.id]=[];
+    const row=document.createElement('div');
+    row.className='drink-row';row.id='drow-'+d.id;
+    row.innerHTML=`
+      <div class="drink-header">
+        <span class="drink-emoji">${d.emoji}</span>
+        <span class="drink-name-label">${d.name}</span>
+        <button class="drink-toggle-btn" id="dtbtn-${d.id}" onclick="toggleDrinkRow('${d.id}')">+</button>
+      </div>
+      <div class="drink-entries" id="dentries-${d.id}">
+        <button class="add-entry-btn" onclick="addEntry('${d.id}')">+ Adicionar ${d.name}</button>
+      </div>`;
+    list.appendChild(row);
+  });
 }
 
+function toggleDrinkRow(id){
+  const entries=document.getElementById('dentries-'+id);
+  const btn=document.getElementById('dtbtn-'+id);
+  const row=document.getElementById('drow-'+id);
+  const isOpen=entries.classList.contains('show');
+  if(isOpen){
+    entries.classList.remove('show');
+    btn.textContent='+';btn.classList.remove('added');
+    row.classList.remove('selected');
+  } else {
+    entries.classList.add('show');
+    btn.textContent='✓';btn.classList.add('added');
+    row.classList.add('selected');
+    if(drinkEntries[id].length===0)addEntry(id);
+  }
+}
+
+let entryCounter=0;
+function addEntry(drinkId){
+  entryCounter++;
+  const eid='e'+entryCounter;
+  drinkEntries[drinkId].push(eid);
+  const entriesDiv=document.getElementById('dentries-'+drinkId);
+  const addBtn=entriesDiv.querySelector('.add-entry-btn');
+  const entry=document.createElement('div');
+  entry.className='drink-entry';entry.id='entry-'+eid;
+  const drinkName=DRINKS.find(d=>d.id===drinkId).name;
+  entry.innerHTML=`
+    <button class="remove-entry" onclick="removeEntry('${drinkId}','${eid}')" title="Remover">✕</button>
+    <p class="entry-label">Marca / Tipo</p>
+    <input class="entry-input" id="brand-${eid}" type="text" placeholder="Ex: Heineken, Moët, Compal...">
+    <div class="qty-row" style="margin-top:10px">
+      <span class="qty-label">Quantidade</span>
+      <button class="qty-btn" onclick="changeEntryQty('${eid}',-1)">−</button>
+      <span class="qty-val" id="qty-${eid}">1</span>
+      <button class="qty-btn" onclick="changeEntryQty('${eid}',1)">+</button>
+      <select class="unit-select" id="unit-${eid}">
+        <option value="unidade(s)">Unidade(s)</option>
+        <option value="caixa(s)">Caixa(s)</option>
+        <option value="embalagem(ns)">Embalagem(ns)</option>
+        <option value="garrafa(s)">Garrafa(s)</option>
+        <option value="lata(s)">Lata(s)</option>
+      </select>
+    </div>`;
+  entriesDiv.insertBefore(entry,addBtn);
+}
+
+function removeEntry(drinkId,eid){
+  drinkEntries[drinkId]=drinkEntries[drinkId].filter(e=>e!==eid);
+  const el=document.getElementById('entry-'+eid);
+  if(el)el.remove();
+  if(drinkEntries[drinkId].length===0){
+    const btn=document.getElementById('dtbtn-'+drinkId);
+    const entries=document.getElementById('dentries-'+drinkId);
+    const row=document.getElementById('drow-'+drinkId);
+    btn.textContent='+';btn.classList.remove('added');
+    entries.classList.remove('show');row.classList.remove('selected');
+  }
+}
+
+function changeEntryQty(eid,delta){
+  const el=document.getElementById('qty-'+eid);
+  el.textContent=Math.max(1,parseInt(el.textContent)+delta);
+}
+
+function getDrinksForMessage(){
+  const lines=[];
+  DRINKS.forEach(d=>{
+    drinkEntries[d.id].forEach(eid=>{
+      const brand=(document.getElementById('brand-'+eid)||{}).value||'';
+      const qty=(document.getElementById('qty-'+eid)||{}).textContent||'1';
+      const unit=(document.getElementById('unit-'+eid)||{}).value||'unidade(s)';
+      lines.push(d.name+(brand?' ('+brand+')':'')+' — '+qty+' '+unit);
+    });
+  });
+  return lines.length?lines.join('\n'):null;
+}
+
+// ── acesso ──
+function getA(){return parseInt(localStorage.getItem('adj31_a')||'0');}
+function saveA(n){localStorage.setItem('adj31_a',n);}
+function initAccessScreen(){
+  const used=getA(),left=MAX-used;
+  document.querySelectorAll('.attempt-dot').forEach((d,i)=>{d.classList.remove('active','used');i<left?d.classList.add('active'):d.classList.add('used');});
+  document.getElementById('attemptsLeft').textContent=left+' acesso'+(left===1?'':'s')+' disponív'+(left===1?'el':'eis');
+  if(left<=0){document.getElementById('accessBtn').style.display='none';document.getElementById('attemptsLeft').style.display='none';document.getElementById('blockedMsg').classList.add('show');}
+}
+function tryAccess(){
+  if(getA()>=MAX){initAccessScreen();return;}
+  saveA(getA()+1);
+  document.getElementById('bloqueio').classList.remove('active');
+  document.getElementById('s1').classList.add('active');cur=1;
+}
+
+// ── navegação ──
+function goTo(n){
+  document.getElementById(cur===0?'bloqueio':'s'+cur).classList.remove('active');
+  document.getElementById('s'+n).classList.add('active');
+  cur=n;window.scrollTo(0,0);
+}
 function openEnvelope(){
   document.getElementById('flap').parentElement.parentElement.classList.add('open');
   setTimeout(()=>goTo(2),700);
 }
-
 function selectZone(el,code){
   document.querySelectorAll('.zone-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedZoneCode=code;
-  selectedZone=el.querySelector('.zone-name').textContent;
+  el.classList.add('selected');selectedZoneCode=code;selectedZone=el.querySelector('.zone-name').textContent;
 }
 
-function toggleDrink(el,drink){
-  if(event.target.tagName==='INPUT'||event.target.tagName==='BUTTON'||event.target.tagName==='SPAN')return;
-  el.classList.toggle('selected');
-  const qr=el.querySelector('.qty-row'),bw=el.querySelector('.brand-wrap');
-  if(el.classList.contains('selected')){qr.style.display='flex';bw.style.display='block';}
-  else{qr.style.display='none';bw.style.display='none';el.querySelector('.qty-val').textContent='1';el.querySelector('.brand-input').value='';}
+// ── acompanhante ──
+function setCompanion(duo){
+  withCompanion=duo;
+  document.getElementById('btn-solo').classList.toggle('selected',!duo);
+  document.getElementById('btn-duo').classList.toggle('selected',duo);
+  document.getElementById('soloBox').style.display=duo?'none':'block';
+  document.getElementById('companionBox').classList.toggle('show',duo);
+  const minVal=duo?7000:3000;
+  document.getElementById('minValueText').innerHTML='Valor mínimo: <strong>'+minVal.toLocaleString('pt-MZ')+' MZN</strong> — '+(duo?'2 pessoas':'1 pessoa');
+  ['3000','5000','7000','10000','13000','15000'].forEach(v=>{
+    const b=document.getElementById('amt-'+v);if(!b)return;
+    parseInt(v)<minVal?b.classList.add('disabled-amt'):b.classList.remove('disabled-amt');
+  });
+  if(selectedAmount>0&&selectedAmount<minVal){
+    selectedAmount=0;
+    document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('selected'));
+    document.getElementById('amountDisplay').style.display='none';
+    checkPayReady();
+  }
 }
 
-function changeQty(e,btn,delta){
-  e.stopPropagation();
-  const v=parseInt(btn.parentElement.querySelector('.qty-val').textContent)+delta;
-  btn.parentElement.querySelector('.qty-val').textContent=Math.max(1,v);
-}
-
+// ── valores ──
 function selectAmount(el,val){
+  const minVal=withCompanion?7000:3000;if(val<minVal)return;
   document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedAmount=val;
+  el.classList.add('selected');selectedAmount=val;
   document.getElementById('customAmt').style.display='none';
   document.getElementById('amountDisplay').style.display='block';
   document.getElementById('amountDisplay').textContent=val.toLocaleString('pt-MZ')+' MZN';
   checkPayReady();
 }
-
 function showCustom(){
   document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('selected'));
-  const inp=document.getElementById('customAmt');
+  const inp=document.getElementById('customAmt'),minVal=withCompanion?7000:3000;
+  inp.min=minVal;inp.placeholder='Mínimo '+minVal.toLocaleString('pt-MZ')+' MZN';
   inp.style.display=inp.style.display==='block'?'none':'block';
   if(inp.style.display==='block')inp.focus();
 }
-
 function setCustomAmount(v){
-  const val=parseInt(v);
-  if(val>=3000){selectedAmount=val;document.getElementById('amountDisplay').style.display='block';document.getElementById('amountDisplay').textContent=val.toLocaleString('pt-MZ')+' MZN';}
+  const minVal=withCompanion?7000:3000,val=parseInt(v);
+  if(val>=minVal){selectedAmount=val;document.getElementById('amountDisplay').style.display='block';document.getElementById('amountDisplay').textContent=val.toLocaleString('pt-MZ')+' MZN';}
   else{selectedAmount=0;document.getElementById('amountDisplay').style.display='none';}
   checkPayReady();
 }
 
+// ── pagamento ──
 function selectPayment(method,cardId,btnId){
   selectedPayment=method;
   document.querySelectorAll('.payment-card').forEach(c=>c.classList.remove('chosen'));
-  document.querySelectorAll('.choose-pay-btn').forEach(b=>{b.classList.remove('chosen');});
+  document.querySelectorAll('.choose-pay-btn').forEach(b=>{b.classList.remove('chosen');b.textContent=b.getAttribute('data-label')||b.textContent;});
   document.getElementById(cardId).classList.add('chosen');
-  const btn=document.getElementById(btnId);
-  btn.classList.add('chosen');
-  btn.textContent='✓ Selecionado';
+  const btn=document.getElementById(btnId);btn.classList.add('chosen');
+  const orig=btn.textContent;btn.setAttribute('data-label',orig);btn.textContent='✓ Selecionado';
   checkPayReady();
 }
-
 function checkPayReady(){
-  const btn=document.getElementById('rsvpNavBtn'),hint=document.getElementById('payHint');
-  if(selectedAmount>=3000&&selectedPayment){btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';hint.style.display='none';}
+  const minVal=withCompanion?7000:3000,btn=document.getElementById('rsvpNavBtn'),hint=document.getElementById('payHint');
+  if(selectedAmount>=minVal&&selectedPayment){btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';hint.style.display='none';}
   else{btn.disabled=true;btn.style.opacity='.4';btn.style.cursor='not-allowed';hint.style.display='block';}
 }
 
 function goToRSVP(){
-  if(!selectedAmount||!selectedPayment)return;
+  const minVal=withCompanion?7000:3000;
+  if(!selectedAmount||selectedAmount<minVal||!selectedPayment)return;
+  const mainName=withCompanion?(document.getElementById('soloName')||{value:''}).value:(document.getElementById('soloName')||{value:''}).value;
+  const comp=withCompanion?(document.getElementById('companionName').value.trim()||'Acompanhante'):'';
+  const solo=(document.getElementById('soloName')||{value:''}).value.trim();
   document.getElementById('paymentSummary').innerHTML=
-    '<p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Resumo do Pedido</p>'+
-    '💰 Valor: <strong style="color:var(--gold)">'+selectedAmount.toLocaleString('pt-MZ')+' MZN</strong><br>'+
-    '💳 Pagamento: '+selectedPayment+'<br>'+
-    '🌿 Ambiente: '+(selectedZone||'Não selecionado');
+    '<p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Resumo</p>'+
+    '👤 '+(solo||'—')+(comp?' & '+comp:'')+'\n<br>'+
+    '👥 '+(withCompanion?'2 pessoas':'1 pessoa')+'<br>'+
+    '💰 <strong style="color:var(--gold)">'+selectedAmount.toLocaleString('pt-MZ')+' MZN</strong><br>'+
+    '💳 '+selectedPayment+'<br>🌿 '+(selectedZone||'Não selecionado');
   goTo(7);
 }
 
 function copyText(btn,text){
-  navigator.clipboard.writeText(text).then(()=>{
-    btn.textContent='Copiado ✓';btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},2000);
-  }).catch(()=>{
+  navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copiado ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},2000);}).catch(()=>{
     const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    btn.textContent='Copiado ✓';btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},2000);
+    btn.textContent='Copiado ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},2000);
   });
 }
 
-function generateCode(name,zoneCode){
-  const z=zoneCode||'GE';
-  const n=(name||'X').slice(0,2).toUpperCase().replace(/\s/g,'');
-  const r=Math.floor(1000+Math.random()*9000);
-  return n+'-'+z+'-'+r;
+function sendToSheets(name,phone,email,companion,pessoas,zone,drinks,amount,payment,code){
+  var payload={
+    timestamp:new Date().toLocaleString('pt-MZ'),
+    name:name,phone:phone,email:email||'',
+    companion:companion||'',pessoas:pessoas,
+    zone:zone,drinks:drinks,amount:amount,
+    payment:payment,code:code
+  };
+  fetch('https://script.google.com/macros/s/AKfycbzgEdfLicqjgff0JiCd6UPTV6I_p4ZYVQDrynzR_dSTr-UMUK6VD8udovDWDdS1cuuS/exec',{
+    method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }).catch(function(){});
 }
 
 function submitRSVP(){
-  const name=document.getElementById('guestName').value.trim();
   const phone=document.getElementById('guestPhone').value.trim();
-  if(!name||!phone){alert('Por favor, preencha nome e telemóvel.');return;}
-  const code=generateCode(name,selectedZoneCode);
+  const soloName=(document.getElementById('soloName')||{value:''}).value.trim();
+  const comp=withCompanion?(document.getElementById('companionName').value.trim()||''):'';
+  if(!soloName){alert('Por favor, insira o seu nome.');goTo(6);return;}
+  if(!phone){alert('Por favor, insira o seu telemóvel.');return;}
+  const n=soloName.slice(0,2).toUpperCase().replace(/\s/g,'');
+  const code=n+'-'+(selectedZoneCode||'GE')+'-'+Math.floor(1000+Math.random()*9000);
   document.getElementById('accessCode').textContent=code;
+  document.getElementById('successSubText').textContent=
+    withCompanion&&comp?'Bem-vindos à festa: '+soloName+' & '+comp:'Seja bem-vindo(a), '+soloName+'. A sua noite começa aqui.';
   document.getElementById('rsvpForm').style.display='none';
   document.getElementById('successMsg').classList.add('show');
-  window._rsvpCode=code;window._rsvpName=name;window._rsvpPhone=phone;
+  window._code=code;window._name=soloName;window._comp=comp;window._phone=phone;
+  var drinks=[];
+  document.querySelectorAll('.drink-card.selected').forEach(function(c){
+    var dn=c.querySelector('.drink-name').textContent,qty=c.querySelector('.qty-val').textContent,brand=c.querySelector('.brand-input').value;
+    drinks.push(dn+(brand?' ('+brand+')':'')+' x'+qty);
+  });
+  sendToSheets(soloName,phone,document.getElementById('guestEmail').value.trim(),comp,withCompanion?'2 pessoas':'1 pessoa',selectedZone||'—',drinks.join(', ')||'—',selectedAmount,selectedPayment,code);
 }
 
 function shareWhatsApp(){
-  const code=window._rsvpCode||'---';
-  const name=window._rsvpName||'';
-  const drinks=[];
-  document.querySelectorAll('.drink-card.selected').forEach(c=>{
-    const dn=c.querySelector('.drink-name').textContent;
-    const qty=c.querySelector('.qty-val').textContent;
-    const brand=c.querySelector('.brand-input').value;
-    drinks.push(dn+(brand?' ('+brand+')':'')+' x'+qty);
-  });
-  const drinkList=drinks.length?drinks.join(', '):'—';
+  const drinks=getDrinksForMessage();
   const msg=encodeURIComponent(
-    '🎉 *Confirmação de Cadastro — Abel Dengo Jr 31 Anos*\n\n'+
-    '👤 Nome: '+name+'\n'+
-    '📅 Data: 09 de Maio de 2026 · 20h00\n'+
-    '🌿 Ambiente: '+(selectedZone||'—')+'\n'+
-    '🍹 Consumo: '+drinkList+'\n'+
-    '💰 Presente: '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'\n\n'+
-    '🔐 *Código de Entrada: '+code+'*\n\n'+
+    '🎉 *Confirmação — Abel Dengo Jr 31 Anos*\n\n'+
+    '👤 '+(window._name||'')+(window._comp?' & '+window._comp:'')+'\n'+
+    '👥 '+(withCompanion?'2 pessoas':'1 pessoa')+'\n'+
+    '📅 09 Maio 2026 · 20h00\n📍 UPsen Garden\n🌿 '+(selectedZone||'—')+'\n\n'+
+    '🍹 *Consumo:*\n'+(drinks||'Não especificado')+'\n\n'+
+    '💰 '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'\n\n'+
+    '🔐 *Código: '+(window._code||'---')+'*\n\n'+
     '_Segue em anexo o comprovativo do presente._'
   );
   window.open('https://wa.me/258843795522?text='+msg,'_blank');
 }
 
 function updateCountdown(){
-  const ev=new Date('2026-05-09T20:00:00');
-  const diff=ev-new Date();
-  if(diff<=0){const cw=document.getElementById('countdown-wrap');if(cw)cw.innerHTML='<p style="color:var(--gold);font-family:Cormorant Garamond,serif;font-size:20px">A festa começa agora! 🎉</p>';return;}
+  const diff=new Date('2026-05-09T20:00:00')-new Date();if(diff<=0)return;
   const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000);
   const cd=document.getElementById('cd-days'),ch=document.getElementById('cd-hours'),cm=document.getElementById('cd-mins');
   if(cd)cd.textContent=d;if(ch)ch.textContent=String(h).padStart(2,'0');if(cm)cm.textContent=String(m).padStart(2,'0');
 }
-updateCountdown();setInterval(updateCountdown,30000);
+
+// INIT
+buildDrinkList();
+initAccessScreen();
+updateCountdown();
+setInterval(updateCountdown,30000);
 </script>
 </body>
 </html>
