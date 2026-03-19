@@ -471,6 +471,13 @@ body{display:flex;flex-direction:column;align-items:center}
       <div class="success-icon">✓</div>
       <p class="success-title">Cadastro Confirmado</p>
       <p class="success-sub" id="successSubText"></p>
+
+      <!-- RESUMO DO REGISTO -->
+      <div id="registoResumo" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:16px;text-align:left;line-height:2">
+        <p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Resumo do Registo</p>
+        <div id="resumoContent" style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.8"></div>
+      </div>
+
       <div class="code-box">
         <div class="code-label">Código de Entrada</div>
         <div class="code-value" id="accessCode">—</div>
@@ -570,6 +577,13 @@ function addEntry(drinkId){
       <button class="qty-btn" onclick="changeEntryQty('${eid}',-1)">−</button>
       <span class="qty-val" id="qty-${eid}">1</span>
       <button class="qty-btn" onclick="changeEntryQty('${eid}',1)">+</button>
+      <select class="unit-select" id="unit-${eid}">
+        <option value="unidade(s)">Unidade(s)</option>
+        <option value="caixa(s)">Caixa(s)</option>
+        <option value="embalagem(ns)">Embalagem(ns)</option>
+        <option value="garrafa(s)">Garrafa(s)</option>
+        <option value="lata(s)">Lata(s)</option>
+      </select>
     </div>`;
   entriesDiv.insertBefore(entry,addBtn);
 }
@@ -598,7 +612,8 @@ function getDrinksForMessage(){
     drinkEntries[d.id].forEach(eid=>{
       const brand=(document.getElementById('brand-'+eid)||{}).value||'';
       const qty=(document.getElementById('qty-'+eid)||{}).textContent||'1';
-      lines.push(d.name+(brand?' — '+brand:'')+' ('+qty+'x)');
+      const unit=(document.getElementById('unit-'+eid)||{}).value||'unidade(s)';
+      lines.push(d.name+(brand?' — '+brand:'')+' · '+qty+' '+unit);
     });
   });
   return lines.length?lines.join('\n'):null;
@@ -775,23 +790,48 @@ function submitRSVP(){
   document.getElementById('successMsg').classList.add('show');
   window._code=code;window._name=guestName;window._comp=comp;window._phone=phone;
   var drinks=[];
-  document.querySelectorAll('.drink-card.selected').forEach(function(c){
-    var dn=c.querySelector('.drink-name').textContent,qty=c.querySelector('.qty-val').textContent,brand=c.querySelector('.brand-input').value;
-    drinks.push(dn+(brand?' ('+brand+')':'')+' x'+qty);
+  document.querySelectorAll && DRINKS.forEach(function(d){
+    drinkEntries[d.id].forEach(function(eid){
+      var brand=(document.getElementById('brand-'+eid)||{}).value||'';
+      var qty=(document.getElementById('qty-'+eid)||{}).textContent||'1';
+      var unit=(document.getElementById('unit-'+eid)||{}).value||'unidade(s)';
+      drinks.push(d.name+(brand?' — '+brand:'')+' · '+qty+' '+unit);
+    });
   });
-  sendToSheets(guestName,phone,comp,withCompanion?'2 pessoas':'1 pessoa',selectedZone||'—',drinks.join(', ')||'—',selectedAmount,selectedPayment,code);
+  window._drinks=drinks;
+
+  // Preenche o resumo visível na tela de sucesso
+  var resumo=document.getElementById('resumoContent');
+  if(resumo){
+    var html='';
+    html+='👤 <strong style="color:var(--gold)">'+guestName+'</strong><br>';
+    if(comp) html+='🤝 <strong style="color:var(--gold)">'+comp+'</strong><br>';
+    html+='📱 '+phone+'<br>';
+    html+='🌿 '+(selectedZone||'—')+'<br>';
+    html+='💰 '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'<br>';
+    if(drinks.length){
+      html+='<br><span style="font-size:10px;letter-spacing:2px;color:var(--gold);opacity:.6;text-transform:uppercase">Preferências de Bebidas</span><br>';
+      drinks.forEach(function(d){html+='🍹 '+d+'<br>';});
+    }
+    resumo.innerHTML=html;
+  }
+  sendToSheets(guestName,phone,comp,withCompanion?'2 pessoas':'1 pessoa',selectedZone||'—',drinks.join(' | ')||'—',selectedAmount,selectedPayment,code);
 }
 
 function shareWhatsApp(){
-  const drinks=getDrinksForMessage();
+  const drinks=(window._drinks&&window._drinks.length)?window._drinks.join('\n'):'Não especificado';
   const msg=encodeURIComponent(
     '🎉 *Confirmação — Abel Dengo Jr 31 Anos*\n\n'+
-    '👤 '+(window._name||'')+(window._comp?' & '+window._comp:'')+'\n'+
+    '👤 *Convidado:* '+(window._name||'')+'\n'+
+    (window._comp?'🤝 *Acompanhante:* '+window._comp+'\n':'')+
     '👥 '+(withCompanion?'2 pessoas':'1 pessoa')+'\n'+
-    '📅 09 Maio 2026 · 20h00\n📍 Upsen Garden\n🌿 '+(selectedZone||'—')+'\n\n'+
-    '🍹 *Consumo:*\n'+(drinks||'Não especificado')+'\n\n'+
-    '💰 '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'\n\n'+
-    '🔐 *Código: '+(window._code||'---')+'*\n\n'+
+    '📱 '+(window._phone||'')+'\n'+
+    '📅 09 Maio 2026 · 20h00\n'+
+    '📍 Upsen Garden\n'+
+    '🌿 '+(selectedZone||'—')+'\n\n'+
+    '🍹 *Preferências de Bebidas:*\n'+drinks+'\n\n'+
+    '💰 *Presente:* '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'\n\n'+
+    '🔐 *Código de Entrada: '+(window._code||'---')+'*\n\n'+
     '_Segue em anexo o comprovativo do presente._'
   );
   window.open('https://wa.me/258873795522?text='+msg,'_blank');
