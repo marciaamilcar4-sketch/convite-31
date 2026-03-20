@@ -13,21 +13,35 @@ body{display:flex;flex-direction:column;align-items:center}
 .screen{width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px 60px;opacity:0;transition:opacity .6s;position:absolute;top:0;left:0;pointer-events:none}
 .screen.active{opacity:1;pointer-events:all;position:relative}
 
-/* BLOQUEIO */
-#bloqueio{background:#0A0A0A;justify-content:center;align-items:center;text-align:center}
-.block-box{max-width:340px;display:flex;flex-direction:column;align-items:center;gap:20px}
-.block-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);font-weight:300;letter-spacing:2px}
-.block-text{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.6;line-height:1.8;font-style:italic}
-.attempts-display{display:flex;gap:12px;margin:8px 0}
-.attempt-dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--gold);transition:all .3s}
-.attempt-dot.used{background:transparent;border-color:#3a2a0a;opacity:.3}
-.attempt-dot.active{background:var(--gold)}
-.warn-box{border:1px solid #8B4A2A;background:#1a0d08;padding:14px 20px;width:100%}
-.warn-box p{font-size:11px;color:#C97A4C;letter-spacing:.5px;line-height:1.7;text-align:center}
-.access-btn{background:var(--gold);color:var(--black);border:none;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:all .3s;width:100%}
-.access-btn:hover{background:var(--gold-light)}
-.blocked-msg{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center}
-.blocked-msg.show{display:flex}
+/* ACESSO NEGADO */
+#negado{background:#0A0A0A;justify-content:center;align-items:center;text-align:center}
+.negado-box{max-width:320px;display:flex;flex-direction:column;align-items:center;gap:20px}
+
+/* ADMIN */
+#admin{background:#0A0A0A;justify-content:center;align-items:center}
+.admin-box{width:100%;max-width:400px;display:flex;flex-direction:column;gap:16px}
+.admin-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold);font-weight:300;letter-spacing:2px;text-align:center}
+.admin-card{background:#111;border:1px solid #1e1e1e;padding:16px}
+.admin-label{font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px}
+.admin-input{width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Montserrat',sans-serif;font-size:13px;padding:12px 14px;outline:none;transition:border .3s;margin-bottom:8px}
+.admin-input:focus{border-color:var(--gold)}
+.admin-input::placeholder{color:rgba(255,255,255,.2);font-size:12px}
+.admin-btn{background:var(--gold);color:var(--black);border:none;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:14px;cursor:pointer;transition:all .3s;width:100%}
+.admin-btn:hover{background:var(--gold-light)}
+.admin-btn.outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.admin-btn.outline:hover{background:var(--gold);color:var(--black)}
+.link-result{background:#0f0d08;border:1px solid var(--gold);padding:14px;margin-top:8px;display:none}
+.link-result.show{display:block}
+.link-text{font-size:11px;color:var(--off-white);opacity:.8;word-break:break-all;line-height:1.7;margin-bottom:8px}
+.link-copy-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:8px 16px;cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif}
+.link-copy-btn:hover{background:var(--gold);color:var(--black)}
+.guest-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-height:300px;overflow-y:auto}
+.guest-item{background:#0f0d08;border:1px solid #1e1e1e;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.guest-item-name{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.8}
+.guest-item-code{font-size:10px;color:var(--gold);opacity:.6;letter-spacing:1px}
+.guest-item-copy{background:transparent;border:1px solid #2a2a2a;color:var(--gold);font-size:9px;padding:4px 8px;cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.guest-item-copy:hover{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.admin-login{width:100%;max-width:320px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
 
 /* ENVELOPE */
 #s1{background:radial-gradient(ellipse at 50% 30%,#1a1209 0%,#0A0A0A 70%);justify-content:center}
@@ -74,8 +88,10 @@ body{display:flex;flex-direction:column;align-items:center}
 .cd-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);font-weight:300;line-height:1}
 .cd-label{font-size:9px;letter-spacing:3px;color:var(--off-white);opacity:.4;text-transform:uppercase;margin-top:4px}
 .cd-sep{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);opacity:.3;align-self:flex-start;padding-top:4px}
+.special-msg-box{border:1px solid var(--gold);padding:20px 24px;background:#0f0d08;max-width:360px;text-align:center}
+.special-msg-box p{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--gold);line-height:1.8;letter-spacing:.5px}
 
-/* SECÇÕES GERAIS */
+/* SECÇÕES */
 .section-wrap{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
 .section-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);font-weight:300;letter-spacing:2px}
 .section-sub{font-size:11px;letter-spacing:3px;color:var(--off-white);opacity:.4;text-transform:uppercase}
@@ -96,21 +112,17 @@ body{display:flex;flex-direction:column;align-items:center}
 .drink-emoji{font-size:20px;width:28px;text-align:center;flex-shrink:0}
 .drink-name-label{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--off-white);flex:1}
 .drink-toggle-btn{width:28px;height:28px;background:transparent;border:1px solid #2a2a2a;color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-family:'Montserrat',sans-serif}
-.drink-toggle-btn:hover{background:var(--gold);color:var(--black);border-color:var(--gold)}
-.drink-toggle-btn.added{background:var(--gold);color:var(--black);border-color:var(--gold)}
-
-/* entradas de bebida individuais */
+.drink-toggle-btn:hover,.drink-toggle-btn.added{background:var(--gold);color:var(--black);border-color:var(--gold)}
 .drink-entries{display:none;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #1e1e1e}
 .drink-entries.show{display:flex}
 .drink-entry{background:#0f0d08;border:1px solid #2a2a2a;padding:10px 12px;position:relative}
-.entry-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
 .entry-label{font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.5;text-transform:uppercase;margin-bottom:4px}
-.entry-input{flex:1;min-width:100px;background:transparent;border:0;border-bottom:1px solid #2a2a2a;color:var(--off-white);font-size:12px;padding:4px 0;outline:none;font-family:'Montserrat',sans-serif}
+.entry-input{width:100%;background:transparent;border:0;border-bottom:1px solid #2a2a2a;color:var(--off-white);font-size:12px;padding:4px 0;outline:none;font-family:'Montserrat',sans-serif;margin-bottom:6px}
 .entry-input::placeholder{color:rgba(255,255,255,.2);font-size:11px}
 .entry-input:focus{border-bottom-color:var(--gold)}
-.unit-select{background:#0f0d08;border:1px solid #2a2a2a;color:var(--off-white);font-size:11px;padding:4px 6px;outline:none;font-family:'Montserrat',sans-serif;cursor:pointer;flex-shrink:0}
+.unit-select{background:#0f0d08;border:1px solid #2a2a2a;color:var(--off-white);font-size:11px;padding:4px 6px;outline:none;font-family:'Montserrat',sans-serif;cursor:pointer}
 .unit-select option{background:#0f0d08}
-.qty-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qty-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
 .qty-label{font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.5;text-transform:uppercase}
 .qty-btn{width:26px;height:26px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .qty-btn:hover{background:var(--gold);color:var(--black)}
@@ -165,6 +177,8 @@ body{display:flex;flex-direction:column;align-items:center}
 .choose-pay-btn.chosen{border-color:var(--gold);color:var(--gold);background:#161208}
 .note-box{border-left:2px solid var(--gold);padding:12px 16px;background:#0f0d08;width:100%}
 .note-box p{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--off-white);opacity:.6;line-height:1.7}
+.warn-box{border:1px solid #8B4A2A;background:#1a0d08;padding:14px 20px;width:100%}
+.warn-box p{font-size:11px;color:#C97A4C;letter-spacing:.5px;line-height:1.7;text-align:center}
 
 /* RSVP */
 #s7{background:#0A0A0A}
@@ -185,46 +199,79 @@ body{display:flex;flex-direction:column;align-items:center}
 .progress{display:flex;gap:8px;margin:16px 0 0}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--off-white);opacity:.15;transition:all .3s}
 .dot.active{background:var(--gold);opacity:1;width:20px;border-radius:3px}
-
-/* mensagem especial */
-.special-msg-box{border:1px solid var(--gold);padding:20px 24px;background:#0f0d08;max-width:360px;text-align:center}
-.special-msg-box p{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--gold);line-height:1.8;letter-spacing:.5px}
 </style>
 </head>
 <body>
 
-<!-- BLOQUEIO -->
-<div class="screen active" id="bloqueio">
-  <div class="block-box">
-    <div style="font-size:40px">🔐</div>
-    <p style="font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;opacity:.7">Convite Exclusivo</p>
-    <p class="block-title">Abel Dengo Jr · 31</p>
-    <div style="height:1px;width:60px;background:var(--gold);opacity:.4"></div>
-    <p class="block-text">Este convite é pessoal e intransmissível, destinado a uma das <strong style="color:var(--gold)">50 pessoas</strong> seleccionadas. Tens apenas <strong style="color:var(--gold)">3 tentativas</strong> para aceder. Após esgotadas, o acesso será permanentemente bloqueado.</p>
-    <div class="attempts-display" id="attemptDots">
-      <div class="attempt-dot active"></div>
-      <div class="attempt-dot active"></div>
-      <div class="attempt-dot active"></div>
+<!-- ADMIN LOGIN / PAINEL -->
+<div class="screen" id="admin">
+  <div id="adminLoginBox" class="admin-login">
+    <div style="font-size:32px">🔐</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);font-weight:300;letter-spacing:2px">Área do Organizador</p>
+    <input type="password" id="adminPassInput" class="admin-input" placeholder="Palavra-passe" style="text-align:center;letter-spacing:4px" onkeydown="if(event.key==='Enter')loginAdmin()">
+    <button class="admin-btn" onclick="loginAdmin()">Entrar</button>
+    <p id="adminLoginErr" style="display:none;font-size:11px;color:#C97A4C;letter-spacing:1px">Palavra-passe incorrecta</p>
+  </div>
+  <div id="adminPainel" style="display:none;width:100%;max-width:420px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);font-weight:300;letter-spacing:2px">Painel Admin</p>
+      <button onclick="logoutAdmin()" style="background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;opacity:.5">Sair</button>
     </div>
-    <p id="attemptsLeft" style="font-size:11px;letter-spacing:2px;color:var(--gold);opacity:.6;text-transform:uppercase">3 acessos disponíveis</p>
-    <div class="warn-box">
-      <p>⚠️ Ao clicar abaixo, uma tentativa será utilizada. Este convite não pode ser partilhado com terceiros.</p>
+    <div class="admin-card" style="margin-bottom:12px">
+      <p class="admin-label">Gerar Novo Convite</p>
+      <input class="admin-input" id="newGuestName" placeholder="Nome do convidado" onkeydown="if(event.key==='Enter')gerarLink()">
+      <button class="admin-btn" onclick="gerarLink()">Gerar Link →</button>
+      <div class="link-result" id="linkResult">
+        <p class="admin-label" style="margin-bottom:4px">Link gerado para <span id="linkForName" style="color:var(--gold)"></span></p>
+        <p class="link-text" id="linkText"></p>
+        <button class="link-copy-btn" onclick="copiarLink()">Copiar Link</button>
+      </div>
     </div>
-    <button class="access-btn" id="accessBtn" onclick="tryAccess()">Abrir o Meu Convite</button>
+    <div class="admin-card">
+      <p class="admin-label">Convidados Gerados (<span id="guestCount">0</span>)</p>
+      <div class="guest-list" id="guestList">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">Nenhum convidado ainda</p>
+      </div>
+      <button class="admin-btn outline" onclick="limparLista()" style="margin-top:12px;font-size:9px">Limpar Lista</button>
+    </div>
+  </div>
+</div>
 
-    <!-- ACESSO ADMIN OCULTO -->
-    <div style="margin-top:24px;width:100%;border-top:1px solid #1a1a1a;padding-top:16px">
-      <p style="font-size:9px;letter-spacing:2px;color:var(--off-white);opacity:.2;text-transform:uppercase;text-align:center;margin-bottom:8px">Acesso Organizador</p>
-      <input type="password" id="adminPass" placeholder="Palavra-passe" style="width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:Montserrat,sans-serif;font-size:12px;padding:10px 14px;outline:none;text-align:center;letter-spacing:2px" onkeydown="if(event.key==='Enter')adminAccess()">
-      <button onclick="adminAccess()" style="width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:Montserrat,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:6px;transition:all .3s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='#2a2a2a'">Entrar</button>
-      <p id="adminErr" style="display:none;font-size:10px;color:#C97A4C;text-align:center;margin-top:6px;letter-spacing:1px">Palavra-passe incorrecta</p>
+<!-- S1: ENVELOPE -->
+<div class="screen active" id="s1">
+  <div id="adminLoginBox" class="admin-login">
+    <div style="font-size:32px">🔐</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);font-weight:300;letter-spacing:2px">Área do Organizador</p>
+    <input type="password" id="adminPassInput" class="admin-input" placeholder="Palavra-passe" style="text-align:center;letter-spacing:4px" onkeydown="if(event.key==='Enter')loginAdmin()">
+    <button class="admin-btn" onclick="loginAdmin()">Entrar</button>
+    <p id="adminLoginErr" style="display:none;font-size:11px;color:#C97A4C;letter-spacing:1px">Palavra-passe incorrecta</p>
+  </div>
+
+  <div id="adminPainel" style="display:none;width:100%;max-width:420px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);font-weight:300;letter-spacing:2px">Painel Admin</p>
+      <button onclick="logoutAdmin()" style="background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;opacity:.5">Sair</button>
     </div>
 
-    <div class="blocked-msg" id="blockedMsg">
-      <div style="font-size:40px">🚫</div>
-      <p class="block-title" style="color:#C97A4C">Acesso Bloqueado</p>
-      <p class="block-text">Esgotaste as 3 tentativas. Contacta o anfitrião para mais informações.</p>
-      <button class="access-btn" style="background:transparent;border:1px solid #C97A4C;color:#C97A4C" onclick="window.open('https://wa.me/258873795522','_blank')">Contactar via WhatsApp</button>
+    <!-- GERAR LINK -->
+    <div class="admin-card" style="margin-bottom:12px">
+      <p class="admin-label">Gerar Novo Convite</p>
+      <input class="admin-input" id="newGuestName" placeholder="Nome do convidado" onkeydown="if(event.key==='Enter')gerarLink()">
+      <button class="admin-btn" onclick="gerarLink()">Gerar Link →</button>
+      <div class="link-result" id="linkResult">
+        <p class="admin-label" style="margin-bottom:4px">Link gerado para <span id="linkForName" style="color:var(--gold)"></span></p>
+        <p class="link-text" id="linkText"></p>
+        <button class="link-copy-btn" onclick="copiarLink()">Copiar Link</button>
+      </div>
+    </div>
+
+    <!-- LISTA DE CONVIDADOS -->
+    <div class="admin-card">
+      <p class="admin-label">Convidados Gerados (<span id="guestCount">0</span>)</p>
+      <div class="guest-list" id="guestList">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">Nenhum convidado ainda</p>
+      </div>
+      <button class="admin-btn outline" onclick="limparLista()" style="margin-top:12px;font-size:9px">Limpar Lista</button>
     </div>
   </div>
 </div>
@@ -232,9 +279,9 @@ body{display:flex;flex-direction:column;align-items:center}
 <!-- S1: ENVELOPE -->
 <div class="screen" id="s1">
   <div class="env-wrap">
-    <p class="pre-title">Você está convidado</p>
-    <h1 class="big-name">Abel Dengo <span>Jr</span></h1>
-    <p class="age-line">31 Anos</p>
+    <p class="pre-title">Join me in celebrating</p>
+    <h1 class="big-name">my 31<sup>st</sup> birthday</h1>
+    <p class="age-line">Abel Dengo <span>Jr</span></p>
     <div class="envelope" onclick="openEnvelope()">
       <div class="env-body">
         <div class="env-flap" id="flap"></div>
@@ -253,11 +300,11 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="hero">
     <p class="invite-label">Uma noite especial</p>
     <div class="divider-gold"></div>
-    <div class="invite-name">31<em>Birthday</em></div>
+    <div class="invite-name">31<sup>st</sup><em>Birthday</em></div>
     <div class="divider-gold"></div>
     <p class="invite-sub">A Night to Remember</p>
     <div class="special-msg-box">
-      <p>"Este convite é especial e você faz parte das 50 pessoas que fazem parte da minha história."</p>
+      <p>"Este convite é especial e você faz parte das 50 pessoas que motivam o meu dia a dia."</p>
     </div>
     <div style="height:1px;width:100%;background:#1a1a1a;margin:4px 0"></div>
     <p class="event-date-big">09 de Maio de 2026</p>
@@ -294,7 +341,7 @@ body{display:flex;flex-direction:column;align-items:center}
     <div class="zones-grid">
       <div class="zone-card" onclick="selectZone(this,'SN')">
         <div class="zone-name">Sereno & Networking</div>
-        <div class="zone-desc">Ambiente calmo · Convívio · Encontros</div>
+        <div class="zone-desc">Ambiente calmo</div>
       </div>
       <div class="zone-card" onclick="selectZone(this,'EN')">
         <div style="font-size:22px;margin-bottom:8px">🎵</div>
@@ -316,11 +363,7 @@ body{display:flex;flex-direction:column;align-items:center}
     <p class="invite-label">Personalize a Sua Experiência</p>
     <p class="section-title">Área de Consumo</p>
     <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Indique as suas preferências de bebidas para que possamos preparar tudo para si. Não há qualquer custo — é apenas para organização.</p>
-
-    <div class="drink-list" id="drinkList">
-      <!-- gerado dinamicamente -->
-    </div>
-
+    <div class="drink-list" id="drinkList"></div>
     <div class="bottom-nav">
       <button class="nav-btn" onclick="goTo(5)">Ver Menu →</button>
       <button class="back-link" onclick="goTo(3)">← Voltar</button>
@@ -367,38 +410,24 @@ body{display:flex;flex-direction:column;align-items:center}
     <p class="invite-label">Gesto de Carinho</p>
     <p class="section-title">Presente</p>
     <p class="gift-intro">"Dependendo do amor que você sente por mim, e o merecimento em estar a degraus deste momento especial junto de mim."</p>
-
-    <p class="section-sub" style="margin-top:8px">Vem sozinho(a) ou com acompanhante?</p>
-    <p style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Abrimos excepção para casais e pessoas em relacionamento.</p>
-
+    <p class="section-sub" style="margin-top:8px">Este convite é válido para uma pessoa!</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Abrimos uma excepção para casais, ao qual se estende ao respectivo acompanhante.</p>
     <div class="companion-toggle">
-      <button class="comp-btn selected" id="btn-solo" onclick="setCompanion(false)">
-        Sozinho(a)
-        <span class="comp-sub">A partir de 3.000 MZN</span>
-      </button>
-      <button class="comp-btn" id="btn-duo" onclick="setCompanion(true)">
-        Com Acompanhante
-        <span class="comp-sub">A partir de 7.000 MZN</span>
-      </button>
+      <button class="comp-btn selected" id="btn-solo" onclick="setCompanion(false)">Sozinho(a)</button>
+      <button class="comp-btn" id="btn-duo" onclick="setCompanion(true)">Com Acompanhante</button>
     </div>
-
-    <!-- NOME SOLO -->
     <div id="soloBox" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:16px">
-      <p class="comp-note" style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--off-white);opacity:.5;line-height:1.7;margin-bottom:12px;text-align:center">Insira o seu nome para que façamos parte da sua história nesta noite.</p>
+      <p class="comp-note">Insira seu nome para fazer parte desta noite especial.</p>
       <input class="input-field" id="soloName" type="text" placeholder="O seu nome completo" style="margin-bottom:0">
     </div>
-
-    <!-- NOME COM ACOMPANHANTE -->
     <div class="companion-box" id="companionBox">
       <p class="comp-note">Indique o seu nome e o do seu acompanhante. Um código conjunto será gerado para os dois.</p>
       <input class="input-field" id="guestNameDuo" type="text" placeholder="O seu nome completo" style="margin-bottom:8px">
       <input class="input-field" id="companionName" type="text" placeholder="Nome completo do acompanhante" style="margin-bottom:0">
     </div>
-
     <div class="min-value-notice">
       <p id="minValueText">Valor mínimo: <strong>3.000 MZN</strong> — 1 pessoa</p>
     </div>
-
     <p class="section-sub">Escolha o Valor (MZN)</p>
     <div class="amount-grid">
       <button class="amount-btn" id="amt-3000" onclick="selectAmount(this,3000)">3.000</button>
@@ -411,10 +440,7 @@ body{display:flex;flex-direction:column;align-items:center}
     </div>
     <input class="custom-input" id="customAmt" type="number" min="3000" placeholder="Mínimo 3.000 MZN" oninput="setCustomAmount(this.value)">
     <div id="amountDisplay" style="display:none;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);letter-spacing:2px;margin:4px 0"></div>
-
     <p class="section-sub" style="margin-top:8px">Método de Pagamento</p>
-
-    <!-- M-PESA -->
     <div class="payment-card" id="pay-mpesa">
       <div class="payment-title">📱 M-Pesa</div>
       <div class="payment-detail">
@@ -427,8 +453,6 @@ body{display:flex;flex-direction:column;align-items:center}
       <p class="payment-name">Abel Alfredo Dengo Junior</p>
       <button class="choose-pay-btn" id="btn-mpesa" onclick="selectPayment('M-Pesa','pay-mpesa','btn-mpesa')">Pagar com M-Pesa →</button>
     </div>
-
-    <!-- E-MOLA -->
     <div class="payment-card" id="pay-emola">
       <div class="payment-title">💳 e-Mola</div>
       <div class="payment-detail">
@@ -441,9 +465,8 @@ body{display:flex;flex-direction:column;align-items:center}
       <p class="payment-name">Abel Alfredo Dengo Junior</p>
       <button class="choose-pay-btn" id="btn-emola" onclick="selectPayment('e-Mola','pay-emola','btn-emola')">Pagar com e-Mola →</button>
     </div>
-
     <div class="warn-box" style="margin-top:4px">
-      <p>⚠️ O cadastro só é válido após confirmação do envio do presente via WhatsApp. Prazo: 30 dias.</p>
+      <p>⚠️ Este acto de carinho encontra-se disponível a partir deste momento e poderá estender-se até ao dia 20 de Abril de 2026.</p>
     </div>
     <div class="bottom-nav">
       <button class="nav-btn" id="rsvpNavBtn" onclick="goToRSVP()" disabled style="opacity:.4;cursor:not-allowed">Confirmar Presença →</button>
@@ -460,7 +483,7 @@ body{display:flex;flex-direction:column;align-items:center}
     <p class="invite-label">Registo de Entrada</p>
     <p class="section-title">Confirmar Presença</p>
     <div class="note-box" style="text-align:left">
-      <p>Convite exclusivo e intransmissível. Só entrará quem tiver feito o cadastro e o envio do presente.</p>
+      <p>Este convite é exclusivo e intransmissível. Termine o cadastro até ao dia 20 de Abril de 2026 ✅.</p>
     </div>
     <div id="paymentSummary" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:14px 16px;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.7;text-align:left;line-height:1.9"></div>
     <div id="rsvpForm" style="width:100%;display:flex;flex-direction:column;gap:12px">
@@ -471,13 +494,10 @@ body{display:flex;flex-direction:column;align-items:center}
       <div class="success-icon">✓</div>
       <p class="success-title">Cadastro Confirmado</p>
       <p class="success-sub" id="successSubText"></p>
-
-      <!-- RESUMO DO REGISTO -->
       <div id="registoResumo" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:16px;text-align:left;line-height:2">
         <p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Resumo do Registo</p>
         <div id="resumoContent" style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.8"></div>
       </div>
-
       <div class="code-box">
         <div class="code-label">Código de Entrada</div>
         <div class="code-value" id="accessCode">—</div>
@@ -502,11 +522,15 @@ body{display:flex;flex-direction:column;align-items:center}
 </div>
 
 <script>
-// ── estado global ──
-let cur=1,selectedZone='',selectedZoneCode='',selectedAmount=0,selectedPayment='',withCompanion=false;
-const MAX=3;
+// ── CONFIGURAÇÕES ──
+const ADMIN_PASSES=['Abel2026','Marcia2026'];
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbzgEdfLicqjgff0JiCd6UPTV6I_p4ZYVQDrynzR_dSTr-UMUK6VD8udovDWDdS1cuuS/exec';
+const STORAGE_KEY='adj31_guests';
 
-// ── bebidas disponíveis ──
+// ── ESTADO ──
+let cur='negado',selectedZone='',selectedZoneCode='',selectedAmount=0,selectedPayment='',withCompanion=false;
+
+// ── BEBIDAS ──
 const DRINKS=[
   {id:'agua',emoji:'💧',name:'Água'},
   {id:'refri',emoji:'🥤',name:'Refrigerante'},
@@ -517,26 +541,228 @@ const DRINKS=[
   {id:'drinks',emoji:'🍹',name:'Drinks'},
   {id:'outro',emoji:'➕',name:'Outro'}
 ];
-
-// ── entradas de bebida por tipo ──
 const drinkEntries={};
+
+// ══════════════════════════════════
+// SISTEMA DE ACESSO POR LINK ÚNICO
+// ══════════════════════════════════
+
+function getGuestList(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){return[];}
+}
+function saveGuestList(list){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(list));
+}
+
+function getUrlCode(){
+  const p=new URLSearchParams(window.location.search);
+  return p.get('c')||'';
+}
+
+function isAdminUrl(){
+  return window.location.search.includes('admin');
+}
+
+function validateCode(code){
+  if(!code)return null;
+  const list=getGuestList();
+  return list.find(function(g){return g.code===code;})||null;
+}
+
+function initApp(){
+  buildDrinkList();
+  updateCountdown();
+  setInterval(updateCountdown,30000);
+
+  // Verificar se é acesso admin
+  if(isAdminUrl()){
+    showScreen('admin');
+    if(sessionStorage.getItem('adj31_adminOk')==='1'){
+      mostrarPainel();
+    }
+    return;
+  }
+
+  // Verificar código no URL
+  const code=getUrlCode();
+  if(!code){
+    // Sem código — abre no envelope directamente (link base)
+    // Mas só mostra o envelope sem código válido se não tiver nenhum código
+    // Para testes sem código, abre o envelope
+    showScreen('s1');
+    return;
+  }
+
+  const guest=validateCode(code);
+  if(!guest){
+    // Código inválido — abre mesmo assim no envelope
+    // O controlo é feito por quem recebe o link, não pela página
+    showScreen('s1');
+    return;
+  }
+
+  // Código válido — abre directamente no envelope
+  showScreen('s1');
+}
+
+function showScreen(id){
+  ['admin','s1','s2','s3','s4','s5','s6','s7'].forEach(function(s){
+    var el=document.getElementById(s);
+    if(el)el.classList.remove('active');
+  });
+  var el=document.getElementById(id);
+  if(el){el.classList.add('active');cur=id;}
+  window.scrollTo(0,0);
+}
+
+function goTo(n){
+  showScreen('s'+n);
+}
+
+// ══════════════════════════════════
+// PAINEL ADMIN
+// ══════════════════════════════════
+
+function loginAdmin(){
+  const pass=document.getElementById('adminPassInput').value;
+  const err=document.getElementById('adminLoginErr');
+  if(ADMIN_PASSES.includes(pass)){
+    sessionStorage.setItem('adj31_adminOk','1');
+    document.getElementById('adminPassInput').value='';
+    err.style.display='none';
+    mostrarPainel();
+  } else {
+    err.style.display='block';
+    document.getElementById('adminPassInput').value='';
+    setTimeout(function(){err.style.display='none';},2000);
+  }
+}
+
+function logoutAdmin(){
+  sessionStorage.removeItem('adj31_adminOk');
+  document.getElementById('adminPainel').style.display='none';
+  document.getElementById('adminLoginBox').style.display='flex';
+}
+
+function mostrarPainel(){
+  document.getElementById('adminLoginBox').style.display='none';
+  document.getElementById('adminPainel').style.display='block';
+  renderGuestList();
+}
+
+function gerarCodigo(nome){
+  const initials=nome.trim().split(' ').map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,3);
+  const rand=Math.floor(1000+Math.random()*9000);
+  return 'ADJ-'+initials+rand;
+}
+
+function gerarLink(){
+  const nome=document.getElementById('newGuestName').value.trim();
+  if(!nome){alert('Insira o nome do convidado.');return;}
+
+  const code=gerarCodigo(nome);
+  const baseUrl=window.location.origin+window.location.pathname;
+  const link=baseUrl+'?c='+code;
+
+  // Guardar na lista
+  const list=getGuestList();
+  list.push({name:nome,code:code,link:link,date:new Date().toLocaleDateString('pt-MZ')});
+  saveGuestList(list);
+
+  // Mostrar resultado
+  document.getElementById('linkForName').textContent=nome;
+  document.getElementById('linkText').textContent=link;
+  document.getElementById('linkResult').classList.add('show');
+  document.getElementById('newGuestName').value='';
+
+  renderGuestList();
+}
+
+function copiarLink(){
+  const link=document.getElementById('linkText').textContent;
+  navigator.clipboard.writeText(link).then(function(){
+    var btn=document.querySelector('.link-copy-btn');
+    var orig=btn.textContent;
+    btn.textContent='Copiado ✓';
+    setTimeout(function(){btn.textContent=orig;},2000);
+  }).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=link;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+  });
+}
+
+function renderGuestList(){
+  const list=getGuestList();
+  const el=document.getElementById('guestList');
+  const count=document.getElementById('guestCount');
+  count.textContent=list.length;
+  if(!list.length){
+    el.innerHTML='<p style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">Nenhum convidado ainda</p>';
+    return;
+  }
+  el.innerHTML=list.map(function(g,i){
+    return '<div class="guest-item">'+
+      '<div><p class="guest-item-name">'+g.name+'</p><p class="guest-item-code">'+g.code+' · '+g.date+'</p></div>'+
+      '<button class="guest-item-copy" onclick="copiarLinkGuest('+i+')">Copiar Link</button>'+
+    '</div>';
+  }).join('');
+}
+
+function copiarLinkGuest(i){
+  const list=getGuestList();
+  const link=list[i].link;
+  navigator.clipboard.writeText(link).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=link;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+  });
+  var btns=document.querySelectorAll('.guest-item-copy');
+  if(btns[i]){
+    btns[i].textContent='Copiado ✓';
+    setTimeout(function(){btns[i].textContent='Copiar Link';},2000);
+  }
+}
+
+function limparLista(){
+  if(confirm('Tens a certeza que queres limpar toda a lista de convidados?')){
+    saveGuestList([]);
+    renderGuestList();
+    document.getElementById('linkResult').classList.remove('show');
+  }
+}
+
+// ══════════════════════════════════
+// CONVITE — FUNÇÕES NORMAIS
+// ══════════════════════════════════
+
+function openEnvelope(){
+  document.getElementById('flap').parentElement.parentElement.classList.add('open');
+  setTimeout(function(){goTo(2);},700);
+}
+
+function selectZone(el,code){
+  document.querySelectorAll('.zone-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');selectedZoneCode=code;selectedZone=el.querySelector('.zone-name').textContent;
+}
 
 function buildDrinkList(){
   const list=document.getElementById('drinkList');
+  if(!list)return;
   list.innerHTML='';
-  DRINKS.forEach(d=>{
+  DRINKS.forEach(function(d){
     drinkEntries[d.id]=[];
     const row=document.createElement('div');
     row.className='drink-row';row.id='drow-'+d.id;
-    row.innerHTML=`
-      <div class="drink-header">
-        <span class="drink-emoji">${d.emoji}</span>
-        <span class="drink-name-label">${d.name}</span>
-        <button class="drink-toggle-btn" id="dtbtn-${d.id}" onclick="toggleDrinkRow('${d.id}')">+</button>
-      </div>
-      <div class="drink-entries" id="dentries-${d.id}">
-        <button class="add-entry-btn" onclick="addEntry('${d.id}')">+ Adicionar ${d.name}</button>
-      </div>`;
+    row.innerHTML=
+      '<div class="drink-header">'+
+      '<span class="drink-emoji">'+d.emoji+'</span>'+
+      '<span class="drink-name-label">'+d.name+'</span>'+
+      '<button class="drink-toggle-btn" id="dtbtn-'+d.id+'" onclick="toggleDrinkRow(\''+d.id+'\')">+</button>'+
+      '</div>'+
+      '<div class="drink-entries" id="dentries-'+d.id+'">'+
+      '<button class="add-entry-btn" onclick="addEntry(\''+d.id+'\')">+ Adicionar '+d.name+'</button>'+
+      '</div>';
     list.appendChild(row);
   });
 }
@@ -547,13 +773,9 @@ function toggleDrinkRow(id){
   const row=document.getElementById('drow-'+id);
   const isOpen=entries.classList.contains('show');
   if(isOpen){
-    entries.classList.remove('show');
-    btn.textContent='+';btn.classList.remove('added');
-    row.classList.remove('selected');
+    entries.classList.remove('show');btn.textContent='+';btn.classList.remove('added');row.classList.remove('selected');
   } else {
-    entries.classList.add('show');
-    btn.textContent='✓';btn.classList.add('added');
-    row.classList.add('selected');
+    entries.classList.add('show');btn.textContent='✓';btn.classList.add('added');row.classList.add('selected');
     if(drinkEntries[id].length===0)addEntry(id);
   }
 }
@@ -567,106 +789,42 @@ function addEntry(drinkId){
   const addBtn=entriesDiv.querySelector('.add-entry-btn');
   const entry=document.createElement('div');
   entry.className='drink-entry';entry.id='entry-'+eid;
-  const drinkName=DRINKS.find(d=>d.id===drinkId).name;
-  entry.innerHTML=`
-    <button class="remove-entry" onclick="removeEntry('${drinkId}','${eid}')" title="Remover">✕</button>
-    <p class="entry-label">Marca preferida (opcional)</p>
-    <input class="entry-input" id="brand-${eid}" type="text" placeholder="Ex: Heineken, Moët, Compal...">
-    <div class="qty-row" style="margin-top:10px">
-      <span class="qty-label">Quantidade</span>
-      <button class="qty-btn" onclick="changeEntryQty('${eid}',-1)">−</button>
-      <span class="qty-val" id="qty-${eid}">1</span>
-      <button class="qty-btn" onclick="changeEntryQty('${eid}',1)">+</button>
-      <select class="unit-select" id="unit-${eid}">
-        <option value="unidade(s)">Unidade(s)</option>
-        <option value="caixa(s)">Caixa(s)</option>
-        <option value="embalagem(ns)">Embalagem(ns)</option>
-        <option value="garrafa(s)">Garrafa(s)</option>
-        <option value="lata(s)">Lata(s)</option>
-      </select>
-    </div>`;
+  const drinkName=DRINKS.find(function(d){return d.id===drinkId;}).name;
+  entry.innerHTML=
+    '<button class="remove-entry" onclick="removeEntry(\''+drinkId+'\',\''+eid+'\')" title="Remover">✕</button>'+
+    '<p class="entry-label">Marca preferida (opcional)</p>'+
+    '<input class="entry-input" id="brand-'+eid+'" type="text" placeholder="Ex: Heineken, Moët, Compal...">'+
+    '<div class="qty-row">'+
+    '<span class="qty-label">Quantidade</span>'+
+    '<button class="qty-btn" onclick="changeEntryQty(\''+eid+'\',-1)">−</button>'+
+    '<span class="qty-val" id="qty-'+eid+'">1</span>'+
+    '<button class="qty-btn" onclick="changeEntryQty(\''+eid+'\',1)">+</button>'+
+    '<select class="unit-select" id="unit-'+eid+'">'+
+    '<option value="unidade(s)">Unidade(s)</option>'+
+    '<option value="caixa(s)">Caixa(s)</option>'+
+    '<option value="embalagem(ns)">Embalagem(ns)</option>'+
+    '<option value="garrafa(s)">Garrafa(s)</option>'+
+    '<option value="lata(s)">Lata(s)</option>'+
+    '</select></div>';
   entriesDiv.insertBefore(entry,addBtn);
 }
 
 function removeEntry(drinkId,eid){
-  drinkEntries[drinkId]=drinkEntries[drinkId].filter(e=>e!==eid);
-  const el=document.getElementById('entry-'+eid);
-  if(el)el.remove();
+  drinkEntries[drinkId]=drinkEntries[drinkId].filter(function(e){return e!==eid;});
+  var el=document.getElementById('entry-'+eid);if(el)el.remove();
   if(drinkEntries[drinkId].length===0){
-    const btn=document.getElementById('dtbtn-'+drinkId);
-    const entries=document.getElementById('dentries-'+drinkId);
-    const row=document.getElementById('drow-'+drinkId);
-    btn.textContent='+';btn.classList.remove('added');
-    entries.classList.remove('show');row.classList.remove('selected');
+    document.getElementById('dtbtn-'+drinkId).textContent='+';
+    document.getElementById('dtbtn-'+drinkId).classList.remove('added');
+    document.getElementById('dentries-'+drinkId).classList.remove('show');
+    document.getElementById('drow-'+drinkId).classList.remove('selected');
   }
 }
 
 function changeEntryQty(eid,delta){
-  const el=document.getElementById('qty-'+eid);
+  var el=document.getElementById('qty-'+eid);
   el.textContent=Math.max(1,parseInt(el.textContent)+delta);
 }
 
-function getDrinksForMessage(){
-  const lines=[];
-  DRINKS.forEach(d=>{
-    drinkEntries[d.id].forEach(eid=>{
-      const brand=(document.getElementById('brand-'+eid)||{}).value||'';
-      const qty=(document.getElementById('qty-'+eid)||{}).textContent||'1';
-      const unit=(document.getElementById('unit-'+eid)||{}).value||'unidade(s)';
-      lines.push(d.name+(brand?' — '+brand:'')+' · '+qty+' '+unit);
-    });
-  });
-  return lines.length?lines.join('\n'):null;
-}
-
-// ── acesso ──
-function getA(){return parseInt(localStorage.getItem('adj31_a')||'0');}
-function saveA(n){localStorage.setItem('adj31_a',n);}
-
-function adminAccess(){
-  const pass=document.getElementById('adminPass').value;
-  const err=document.getElementById('adminErr');
-  // Palavra-passe secreta — muda para a que quiseres
-  if(pass==='Abel2026'||pass==='Marcia2026'){
-    localStorage.setItem('adj31_admin','1');
-    document.getElementById('bloqueio').classList.remove('active');
-    document.getElementById('s1').classList.add('active');
-    cur=1;
-  } else {
-    err.style.display='block';
-    document.getElementById('adminPass').value='';
-    setTimeout(function(){err.style.display='none';},2000);
-  }
-}
-function initAccessScreen(){
-  const used=getA(),left=MAX-used;
-  document.querySelectorAll('.attempt-dot').forEach((d,i)=>{d.classList.remove('active','used');i<left?d.classList.add('active'):d.classList.add('used');});
-  document.getElementById('attemptsLeft').textContent=left+' acesso'+(left===1?'':'s')+' disponív'+(left===1?'el':'eis');
-  if(left<=0){document.getElementById('accessBtn').style.display='none';document.getElementById('attemptsLeft').style.display='none';document.getElementById('blockedMsg').classList.add('show');}
-}
-function tryAccess(){
-  if(getA()>=MAX){initAccessScreen();return;}
-  saveA(getA()+1);
-  document.getElementById('bloqueio').classList.remove('active');
-  document.getElementById('s1').classList.add('active');cur=1;
-}
-
-// ── navegação ──
-function goTo(n){
-  document.getElementById(cur===0?'bloqueio':'s'+cur).classList.remove('active');
-  document.getElementById('s'+n).classList.add('active');
-  cur=n;window.scrollTo(0,0);
-}
-function openEnvelope(){
-  document.getElementById('flap').parentElement.parentElement.classList.add('open');
-  setTimeout(()=>goTo(2),700);
-}
-function selectZone(el,code){
-  document.querySelectorAll('.zone-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');selectedZoneCode=code;selectedZone=el.querySelector('.zone-name').textContent;
-}
-
-// ── acompanhante ──
 function setCompanion(duo){
   withCompanion=duo;
   document.getElementById('btn-solo').classList.toggle('selected',!duo);
@@ -675,67 +833,67 @@ function setCompanion(duo){
   document.getElementById('companionBox').classList.toggle('show',duo);
   const minVal=duo?7000:3000;
   document.getElementById('minValueText').innerHTML='Valor mínimo: <strong>'+minVal.toLocaleString('pt-MZ')+' MZN</strong> — '+(duo?'2 pessoas':'1 pessoa');
-  ['3000','5000','7000','10000','13000','15000'].forEach(v=>{
-    const b=document.getElementById('amt-'+v);if(!b)return;
+  ['3000','5000','7000','10000','13000','15000'].forEach(function(v){
+    var b=document.getElementById('amt-'+v);if(!b)return;
     parseInt(v)<minVal?b.classList.add('disabled-amt'):b.classList.remove('disabled-amt');
   });
   if(selectedAmount>0&&selectedAmount<minVal){
     selectedAmount=0;
-    document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('selected'));
+    document.querySelectorAll('.amount-btn').forEach(function(b){b.classList.remove('selected');});
     document.getElementById('amountDisplay').style.display='none';
     checkPayReady();
   }
 }
 
-// ── valores ──
 function selectAmount(el,val){
   const minVal=withCompanion?7000:3000;if(val<minVal)return;
-  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.amount-btn').forEach(function(b){b.classList.remove('selected');});
   el.classList.add('selected');selectedAmount=val;
   document.getElementById('customAmt').style.display='none';
   document.getElementById('amountDisplay').style.display='block';
   document.getElementById('amountDisplay').textContent=val.toLocaleString('pt-MZ')+' MZN';
   checkPayReady();
 }
+
 function showCustom(){
-  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('selected'));
-  const inp=document.getElementById('customAmt'),minVal=withCompanion?7000:3000;
+  document.querySelectorAll('.amount-btn').forEach(function(b){b.classList.remove('selected');});
+  var inp=document.getElementById('customAmt'),minVal=withCompanion?7000:3000;
   inp.min=minVal;inp.placeholder='Mínimo '+minVal.toLocaleString('pt-MZ')+' MZN';
   inp.style.display=inp.style.display==='block'?'none':'block';
   if(inp.style.display==='block')inp.focus();
 }
+
 function setCustomAmount(v){
-  const minVal=withCompanion?7000:3000,val=parseInt(v);
+  var minVal=withCompanion?7000:3000,val=parseInt(v);
   if(val>=minVal){selectedAmount=val;document.getElementById('amountDisplay').style.display='block';document.getElementById('amountDisplay').textContent=val.toLocaleString('pt-MZ')+' MZN';}
   else{selectedAmount=0;document.getElementById('amountDisplay').style.display='none';}
   checkPayReady();
 }
 
-// ── pagamento ──
 function selectPayment(method,cardId,btnId){
   selectedPayment=method;
-  document.querySelectorAll('.payment-card').forEach(c=>c.classList.remove('chosen'));
-  document.querySelectorAll('.choose-pay-btn').forEach(b=>{b.classList.remove('chosen');b.textContent=b.getAttribute('data-label')||b.textContent;});
+  document.querySelectorAll('.payment-card').forEach(function(c){c.classList.remove('chosen');});
+  document.querySelectorAll('.choose-pay-btn').forEach(function(b){b.classList.remove('chosen');b.textContent=b.getAttribute('data-label')||b.textContent;});
   document.getElementById(cardId).classList.add('chosen');
-  const btn=document.getElementById(btnId);btn.classList.add('chosen');
-  const orig=btn.textContent;btn.setAttribute('data-label',orig);btn.textContent='✓ Selecionado';
+  var btn=document.getElementById(btnId);btn.classList.add('chosen');
+  btn.setAttribute('data-label',btn.textContent);btn.textContent='✓ Selecionado';
   checkPayReady();
 }
+
 function checkPayReady(){
-  const minVal=withCompanion?7000:3000,btn=document.getElementById('rsvpNavBtn'),hint=document.getElementById('payHint');
+  var minVal=withCompanion?7000:3000,btn=document.getElementById('rsvpNavBtn'),hint=document.getElementById('payHint');
   if(selectedAmount>=minVal&&selectedPayment){btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';hint.style.display='none';}
   else{btn.disabled=true;btn.style.opacity='.4';btn.style.cursor='not-allowed';hint.style.display='block';}
 }
 
 function goToRSVP(){
-  const minVal=withCompanion?7000:3000;
+  var minVal=withCompanion?7000:3000;
   if(!selectedAmount||selectedAmount<minVal||!selectedPayment)return;
-  const mainName=withCompanion?(document.getElementById('soloName')||{value:''}).value:(document.getElementById('soloName')||{value:''}).value;
-  const comp=withCompanion?(document.getElementById('companionName').value.trim()||'Acompanhante'):'';
-  const solo=(document.getElementById('soloName')||{value:''}).value.trim();
+  var guestName=withCompanion?(document.getElementById('guestNameDuo')||{value:''}).value.trim():(document.getElementById('soloName')||{value:''}).value.trim();
+  var comp=withCompanion?(document.getElementById('companionName')||{value:''}).value.trim():'';
   document.getElementById('paymentSummary').innerHTML=
     '<p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Resumo</p>'+
-    '👤 '+(solo||'—')+(comp?' & '+comp:'')+'\n<br>'+
+    '👤 '+(guestName||'—')+(comp?' & '+comp:'')+'\n<br>'+
     '👥 '+(withCompanion?'2 pessoas':'1 pessoa')+'<br>'+
     '💰 <strong style="color:var(--gold)">'+selectedAmount.toLocaleString('pt-MZ')+' MZN</strong><br>'+
     '💳 '+selectedPayment+'<br>🌿 '+(selectedZone||'Não selecionado');
@@ -743,34 +901,15 @@ function goToRSVP(){
 }
 
 function copyText(btn,text){
-  navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copiado ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},2000);}).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    btn.textContent='Copiado ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},2000);
+  navigator.clipboard.writeText(text).then(function(){btn.textContent='Copiado ✓';btn.classList.add('copied');setTimeout(function(){btn.textContent='Copiar';btn.classList.remove('copied');},2000);}).catch(function(){
+    var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    btn.textContent='Copiado ✓';btn.classList.add('copied');setTimeout(function(){btn.textContent='Copiar';btn.classList.remove('copied');},2000);
   });
 }
 
-function sendToSheets(name,phone,companion,pessoas,zone,drinks,amount,payment,code){
-  var payload={
-    timestamp:new Date().toLocaleString('pt-MZ'),
-    name:name,
-    phone:phone,
-    companion:companion||'—',
-    pessoas:pessoas,
-    zone:zone,
-    drinks:drinks,
-    amount:amount,
-    payment:payment,
-    code:code
-  };
-  var url='https://script.google.com/macros/s/AKfycbzgEdfLicqjgff0JiCd6UPTV6I_p4ZYVQDrynzR_dSTr-UMUK6VD8udovDWDdS1cuuS/exec';
-  var encoded=Object.keys(payload).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(payload[k]);}).join('&');
-  fetch(url+'?'+encoded,{method:'GET',mode:'no-cors'}).catch(function(){});
-}
-
 function submitRSVP(){
-  const phone=document.getElementById('guestPhone').value.trim();
-  var guestName='';
-  var comp='';
+  var phone=document.getElementById('guestPhone').value.trim();
+  var guestName='',comp='';
   if(withCompanion){
     guestName=(document.getElementById('guestNameDuo')||{value:''}).value.trim();
     comp=(document.getElementById('companionName')||{value:''}).value.trim();
@@ -781,16 +920,17 @@ function submitRSVP(){
     if(!guestName){alert('Por favor, insira o seu nome.');return;}
   }
   if(!phone){alert('Por favor, insira o seu WhatsApp / Telemóvel.');return;}
-  const n=guestName.slice(0,2).toUpperCase().replace(/\s/g,'');
-  const code=n+'-'+(selectedZoneCode||'GE')+'-'+Math.floor(1000+Math.random()*9000);
+  var n=guestName.slice(0,2).toUpperCase().replace(/\s/g,'');
+  var code=n+'-'+(selectedZoneCode||'GE')+'-'+Math.floor(1000+Math.random()*9000);
   document.getElementById('accessCode').textContent=code;
   document.getElementById('successSubText').textContent=
     withCompanion&&comp?'Bem-vindos à festa: '+guestName+' & '+comp:'Seja bem-vindo(a), '+guestName+'. A sua noite começa aqui.';
   document.getElementById('rsvpForm').style.display='none';
   document.getElementById('successMsg').classList.add('show');
   window._code=code;window._name=guestName;window._comp=comp;window._phone=phone;
+
   var drinks=[];
-  document.querySelectorAll && DRINKS.forEach(function(d){
+  DRINKS.forEach(function(d){
     drinkEntries[d.id].forEach(function(eid){
       var brand=(document.getElementById('brand-'+eid)||{}).value||'';
       var qty=(document.getElementById('qty-'+eid)||{}).textContent||'1';
@@ -800,12 +940,10 @@ function submitRSVP(){
   });
   window._drinks=drinks;
 
-  // Preenche o resumo visível na tela de sucesso
   var resumo=document.getElementById('resumoContent');
   if(resumo){
-    var html='';
-    html+='👤 <strong style="color:var(--gold)">'+guestName+'</strong><br>';
-    if(comp) html+='🤝 <strong style="color:var(--gold)">'+comp+'</strong><br>';
+    var html='👤 <strong style="color:var(--gold)">'+guestName+'</strong><br>';
+    if(comp)html+='🤝 <strong style="color:var(--gold)">'+comp+'</strong><br>';
     html+='📱 '+phone+'<br>';
     html+='🌿 '+(selectedZone||'—')+'<br>';
     html+='💰 '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'<br>';
@@ -815,12 +953,25 @@ function submitRSVP(){
     }
     resumo.innerHTML=html;
   }
+
   sendToSheets(guestName,phone,comp,withCompanion?'2 pessoas':'1 pessoa',selectedZone||'—',drinks.join(' | ')||'—',selectedAmount,selectedPayment,code);
 }
 
+function sendToSheets(name,phone,companion,pessoas,zone,drinks,amount,payment,code){
+  var payload={
+    timestamp:new Date().toLocaleString('pt-MZ'),
+    name:name,phone:phone,companion:companion||'—',
+    pessoas:pessoas,zone:zone,drinks:drinks,
+    amount:amount,payment:payment,code:code
+  };
+  var url=SHEETS_URL;
+  var encoded=Object.keys(payload).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(payload[k]);}).join('&');
+  fetch(url+'?'+encoded,{method:'GET',mode:'no-cors'}).catch(function(){});
+}
+
 function shareWhatsApp(){
-  const drinks=(window._drinks&&window._drinks.length)?window._drinks.join('\n'):'Não especificado';
-  const msg=encodeURIComponent(
+  var drinks=(window._drinks&&window._drinks.length)?window._drinks.join('\n'):'Não especificado';
+  var msg=encodeURIComponent(
     '🎉 *Confirmação — Abel Dengo Jr 31 Anos*\n\n'+
     '👤 *Convidado:* '+(window._name||'')+'\n'+
     (window._comp?'🤝 *Acompanhante:* '+window._comp+'\n':'')+
@@ -838,17 +989,14 @@ function shareWhatsApp(){
 }
 
 function updateCountdown(){
-  const diff=new Date('2026-05-09T20:00:00')-new Date();if(diff<=0)return;
-  const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000);
-  const cd=document.getElementById('cd-days'),ch=document.getElementById('cd-hours'),cm=document.getElementById('cd-mins');
+  var diff=new Date('2026-05-09T20:00:00')-new Date();if(diff<=0)return;
+  var d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000);
+  var cd=document.getElementById('cd-days'),ch=document.getElementById('cd-hours'),cm=document.getElementById('cd-mins');
   if(cd)cd.textContent=d;if(ch)ch.textContent=String(h).padStart(2,'0');if(cm)cm.textContent=String(m).padStart(2,'0');
 }
 
-// INIT
-buildDrinkList();
-initAccessScreen();
-updateCountdown();
-setInterval(updateCountdown,30000);
+// INICIAR
+initApp();
 </script>
 </body>
 </html>
