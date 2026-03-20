@@ -220,7 +220,7 @@ body{display:flex;flex-direction:column;align-items:center}
     <div class="admin-card" style="margin-bottom:12px">
       <p class="admin-label">Gerar Novo Convite</p>
       <input class="admin-input" id="newGuestName" placeholder="Nome do convidado" onkeydown="if(event.key==='Enter')gerarLink()">
-      <button class="admin-btn" onclick="gerarLink()">Gerar Link →</button>
+      <button class="admin-btn" id="btnGerarLink" onclick="gerarLink()">Gerar Link →</button>
       <div class="link-result" id="linkResult">
         <p class="admin-label" style="margin-bottom:4px">Link gerado para <span id="linkForName" style="color:var(--gold)"></span></p>
         <p class="link-text" id="linkText"></p>
@@ -486,10 +486,10 @@ body{display:flex;flex-direction:column;align-items:center}
 // ── CONFIGURAÇÕES ──
 const ADMIN_PASSES=['Abel2026','Marcia2026'];
 const SHEETS_URL='https://script.google.com/macros/s/AKfycbzgEdfLicqjgff0JiCd6UPTV6I_p4ZYVQDrynzR_dSTr-UMUK6VD8udovDWDdS1cuuS/exec';
-const STORAGE_KEY='adj31_guests';
+const FB_URL='https://aniversario-abel-dengo-default-rtdb.firebaseio.com/convites';
 
 // ── ESTADO ──
-let cur='negado',selectedZone='',selectedZoneCode='',selectedAmount=0,selectedPayment='',withCompanion=false;
+let cur='s1',selectedZone='',selectedZoneCode='',selectedAmount=0,selectedPayment='',withCompanion=false;
 
 // ── BEBIDAS ──
 const DRINKS=[
@@ -505,15 +505,8 @@ const DRINKS=[
 const drinkEntries={};
 
 // ══════════════════════════════════
-// SISTEMA DE ACESSO POR LINK ÚNICO
+// FIREBASE — SISTEMA DE LINK ÚNICO
 // ══════════════════════════════════
-
-function getGuestList(){
-  try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){return[];}
-}
-function saveGuestList(list){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(list));
-}
 
 function getUrlCode(){
   const p=new URLSearchParams(window.location.search);
@@ -525,21 +518,63 @@ function isAdminUrl(){
   return p.has('admin');
 }
 
-function initApp(){
+async function validateCode(code){
+  if(!code)return false;
+  try{
+    const r=await fetch(FB_URL+'/'+code+'.json');
+    const data=await r.json();
+    return data!==null;
+  }catch(e){return false;}
+}
+
+async function saveCodeFirebase(code,nome,link){
+  try{
+    await fetch(FB_URL+'/'+code+'.json',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:nome,code:code,link:link,date:new Date().toLocaleDateString('pt-MZ')})
+    });
+    return true;
+  }catch(e){return false;}
+}
+
+async function fetchAllGuests(){
+  try{
+    const r=await fetch(FB_URL+'.json');
+    const data=await r.json();
+    if(!data)return[];
+    return Object.values(data);
+  }catch(e){return[];}
+}
+
+async function initApp(){
   buildDrinkList();
   updateCountdown();
   setInterval(updateCountdown,30000);
 
-  // Verificar se é acesso admin — só se o URL tiver exactamente ?admin
   if(isAdminUrl()){
     showScreen('admin');
-    if(sessionStorage.getItem('adj31_adminOk')==='1'){
-      mostrarPainel();
-    }
+    if(sessionStorage.getItem('adj31_adminOk')==='1')mostrarPainel();
     return;
   }
 
-  // Qualquer outro acesso — abre directamente no envelope
+  const code=getUrlCode();
+  if(!code){showScreen('s1');return;}
+
+  const valid=await validateCode(code);
+  if(!valid){
+    showScreen('s1');
+    setTimeout(function(){
+      var wrap=document.querySelector('.env-wrap');
+      if(wrap){
+        var msg=document.createElement('p');
+        msg.style.cssText='font-size:10px;letter-spacing:2px;color:#C97A4C;text-transform:uppercase;text-align:center;margin-top:-16px;opacity:.7';
+        msg.textContent='Convite não reconhecido';
+        wrap.appendChild(msg);
+      }
+    },300);
+    return;
+  }
   showScreen('s1');
 }
 
@@ -582,10 +617,10 @@ function logoutAdmin(){
   document.getElementById('adminLoginBox').style.display='flex';
 }
 
-function mostrarPainel(){
+async function mostrarPainel(){
   document.getElementById('adminLoginBox').style.display='none';
   document.getElementById('adminPainel').style.display='block';
-  renderGuestList();
+  await renderGuestList();
 }
 
 function gerarCodigo(nome){
@@ -594,35 +629,30 @@ function gerarCodigo(nome){
   return 'ADJ-'+initials+rand;
 }
 
-function gerarLink(){
+async function gerarLink(){
   const nome=document.getElementById('newGuestName').value.trim();
   if(!nome){alert('Insira o nome do convidado.');return;}
-
   const code=gerarCodigo(nome);
   const baseUrl=window.location.origin+window.location.pathname;
   const link=baseUrl+'?c='+code;
-
-  // Guardar na lista
-  const list=getGuestList();
-  list.push({name:nome,code:code,link:link,date:new Date().toLocaleDateString('pt-MZ')});
-  saveGuestList(list);
-
-  // Mostrar resultado
+  const btn=document.getElementById('btnGerarLink');
+  if(btn){btn.textContent='A guardar...';btn.disabled=true;}
+  const ok=await saveCodeFirebase(code,nome,link);
+  if(btn){btn.textContent='Gerar Link →';btn.disabled=false;}
+  if(!ok){alert('Erro ao guardar. Verifica a ligação.');return;}
   document.getElementById('linkForName').textContent=nome;
   document.getElementById('linkText').textContent=link;
   document.getElementById('linkResult').classList.add('show');
   document.getElementById('newGuestName').value='';
-
-  renderGuestList();
+  await renderGuestList();
 }
 
 function copiarLink(){
   const link=document.getElementById('linkText').textContent;
   navigator.clipboard.writeText(link).then(function(){
     var btn=document.querySelector('.link-copy-btn');
-    var orig=btn.textContent;
     btn.textContent='Copiado ✓';
-    setTimeout(function(){btn.textContent=orig;},2000);
+    setTimeout(function(){btn.textContent='Copiar Link';},2000);
   }).catch(function(){
     var ta=document.createElement('textarea');
     ta.value=link;document.body.appendChild(ta);ta.select();
@@ -630,43 +660,42 @@ function copiarLink(){
   });
 }
 
-function renderGuestList(){
-  const list=getGuestList();
+async function renderGuestList(){
   const el=document.getElementById('guestList');
   const count=document.getElementById('guestCount');
+  el.innerHTML='<p style="font-family:\'Cormorant Garamond\',serif;font-size:13px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">A carregar...</p>';
+  const list=await fetchAllGuests();
   count.textContent=list.length;
   if(!list.length){
     el.innerHTML='<p style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">Nenhum convidado ainda</p>';
     return;
   }
-  el.innerHTML=list.map(function(g,i){
+  el.innerHTML=list.map(function(g){
     return '<div class="guest-item">'+
-      '<div><p class="guest-item-name">'+g.name+'</p><p class="guest-item-code">'+g.code+' · '+g.date+'</p></div>'+
-      '<button class="guest-item-copy" onclick="copiarLinkGuest('+i+')">Copiar Link</button>'+
+      '<div><p class="guest-item-name">'+g.name+'</p>'+
+      '<p class="guest-item-code">'+g.code+' · '+g.date+'</p></div>'+
+      '<button class="guest-item-copy" onclick="copiarLinkGuest(\''+g.link+'\',this)">Copiar Link</button>'+
     '</div>';
   }).join('');
 }
 
-function copiarLinkGuest(i){
-  const list=getGuestList();
-  const link=list[i].link;
+function copiarLinkGuest(link,btn){
   navigator.clipboard.writeText(link).catch(function(){
     var ta=document.createElement('textarea');
     ta.value=link;document.body.appendChild(ta);ta.select();
     document.execCommand('copy');document.body.removeChild(ta);
   });
-  var btns=document.querySelectorAll('.guest-item-copy');
-  if(btns[i]){
-    btns[i].textContent='Copiado ✓';
-    setTimeout(function(){btns[i].textContent='Copiar Link';},2000);
-  }
+  btn.textContent='Copiado ✓';
+  setTimeout(function(){btn.textContent='Copiar Link';},2000);
 }
 
-function limparLista(){
-  if(confirm('Tens a certeza que queres limpar toda a lista de convidados?')){
-    saveGuestList([]);
-    renderGuestList();
-    document.getElementById('linkResult').classList.remove('show');
+async function limparLista(){
+  if(confirm('Tens a certeza que queres limpar toda a lista?')){
+    try{
+      await fetch(FB_URL+'.json',{method:'DELETE'});
+      await renderGuestList();
+      document.getElementById('linkResult').classList.remove('show');
+    }catch(e){alert('Erro ao limpar.');}
   }
 }
 
