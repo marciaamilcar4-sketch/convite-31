@@ -519,12 +519,34 @@ function isAdminUrl(){
 }
 
 async function validateCode(code){
-  if(!code)return false;
+  if(!code)return{valid:false,reason:'nocode'};
   try{
     const r=await fetch(FB_URL+'/'+code+'.json');
     const data=await r.json();
-    return data!==null;
-  }catch(e){return false;}
+    if(!data)return{valid:false,reason:'invalid'};
+    return{valid:true,data:data};
+  }catch(e){return{valid:false,reason:'error'};}
+}
+
+// Gera um ID único para este dispositivo/browser
+function getDeviceId(){
+  let id=localStorage.getItem('adj31_device');
+  if(!id){
+    id='dev-'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+    localStorage.setItem('adj31_device',id);
+  }
+  return id;
+}
+
+// Regista o dispositivo no Firebase para este código
+async function registerDevice(code,deviceId){
+  try{
+    await fetch(FB_URL+'/'+code+'/device.json',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(deviceId)
+    });
+  }catch(e){}
 }
 
 async function saveCodeFirebase(code,nome,link){
@@ -532,7 +554,7 @@ async function saveCodeFirebase(code,nome,link){
     await fetch(FB_URL+'/'+code+'.json',{
       method:'PUT',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:nome,code:code,link:link,date:new Date().toLocaleDateString('pt-MZ')})
+      body:JSON.stringify({name:nome,code:code,link:link,date:new Date().toLocaleDateString('pt-MZ'),device:null})
     });
     return true;
   }catch(e){return false;}
@@ -561,21 +583,55 @@ async function initApp(){
   const code=getUrlCode();
   if(!code){showScreen('s1');return;}
 
-  const valid=await validateCode(code);
-  if(!valid){
-    showScreen('s1');
-    setTimeout(function(){
-      var wrap=document.querySelector('.env-wrap');
-      if(wrap){
-        var msg=document.createElement('p');
-        msg.style.cssText='font-size:10px;letter-spacing:2px;color:#C97A4C;text-transform:uppercase;text-align:center;margin-top:-16px;opacity:.7';
-        msg.textContent='Convite não reconhecido';
-        wrap.appendChild(msg);
-      }
-    },300);
+  const result=await validateCode(code);
+
+  // Código não existe
+  if(!result.valid){
+    showAcessoNegado('Este convite não é válido.');
     return;
   }
-  showScreen('s1');
+
+  const data=result.data;
+  const deviceId=getDeviceId();
+  const registeredDevice=data.device||null;
+
+  // Nenhum dispositivo registado ainda — este é o primeiro acesso
+  if(!registeredDevice){
+    await registerDevice(code,deviceId);
+    showScreen('s1');
+    return;
+  }
+
+  // Dispositivo registado é o mesmo — convidado original
+  if(registeredDevice===deviceId){
+    showScreen('s1');
+    return;
+  }
+
+  // Dispositivo diferente — acesso negado
+  showAcessoNegado('Este convite já foi aberto noutro dispositivo e não pode ser partilhado.');
+}
+
+function showAcessoNegado(mensagem){
+  // Esconder tudo
+  ['admin','s1','s2','s3','s4','s5','s6','s7'].forEach(function(s){
+    var el=document.getElementById(s);if(el)el.classList.remove('active');
+  });
+  // Criar tela de acesso negado dinamicamente
+  var existing=document.getElementById('negado-dinamico');
+  if(existing)existing.remove();
+  var div=document.createElement('div');
+  div.id='negado-dinamico';
+  div.style.cssText='width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;background:#0A0A0A;text-align:center;gap:20px';
+  div.innerHTML=
+    '<div style="font-size:48px">🚫</div>'+
+    '<p style="font-size:10px;letter-spacing:5px;color:#C97A4C;text-transform:uppercase;opacity:.8">Acesso Negado</p>'+
+    '<p style="font-family:\'Cormorant Garamond\',serif;font-size:26px;color:#C97A4C;font-weight:300;letter-spacing:2px">Abel Dengo Jr · 31</p>'+
+    '<div style="height:1px;width:60px;background:#C97A4C;opacity:.4"></div>'+
+    '<p style="font-family:\'Cormorant Garamond\',serif;font-size:15px;color:var(--off-white);opacity:.5;line-height:1.8;font-style:italic;max-width:280px">'+mensagem+'</p>'+
+    '<p style="font-family:\'Cormorant Garamond\',serif;font-size:13px;color:var(--off-white);opacity:.4;line-height:1.7;font-style:italic;max-width:280px">Este convite é pessoal e intransmissível.<br>Para receber o teu convite, contacta o anfitrião.</p>'+
+    '<button style="background:transparent;border:1px solid #C97A4C;color:#C97A4C;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:14px 32px;cursor:pointer;margin-top:8px" onclick="window.open(\'https://wa.me/258873795522\',\'_blank\')">Contactar via WhatsApp</button>';
+  document.body.appendChild(div);
 }
 
 function showScreen(id){
