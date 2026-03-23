@@ -228,7 +228,14 @@ body{display:flex;flex-direction:column;align-items:center}
       </div>
     </div>
     <div class="admin-card">
-      <p class="admin-label">Convidados Gerados (<span id="guestCount">0</span>)</p>
+      <p class="admin-label">Pendentes a Confirmar (<span id="pendingCount">0</span>)</p>
+      <div class="guest-list" id="pendingList">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">Nenhum pedido pendente</p>
+      </div>
+    </div>
+
+    <div class="admin-card" style="margin-top:12px">
+      <p class="admin-label">Todos os Convidados (<span id="guestCount">0</span>)</p>
       <div class="guest-list" id="guestList">
         <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">Nenhum convidado ainda</p>
       </div>
@@ -447,36 +454,37 @@ body{display:flex;flex-direction:column;align-items:center}
       <p>Este convite é exclusivo e intransmissível. Termine o cadastro até ao dia 20 de Abril de 2026 ✅.</p>
     </div>
     <div id="paymentSummary" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:14px 16px;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.7;text-align:left;line-height:1.9"></div>
+
+    <!-- FORMULÁRIO -->
     <div id="rsvpForm" style="width:100%;display:flex;flex-direction:column;gap:12px">
       <input class="input-field" id="guestPhone" type="tel" placeholder="WhatsApp / Telemóvel">
-      <button class="confirm-btn" onclick="submitRSVP()">Confirmar Presença & Gerar Código</button>
+
+      <!-- COMPROVATIVO -->
+      <div style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:14px">
+        <p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Comprovativo de Transferência</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--off-white);opacity:.4;line-height:1.7;margin-bottom:10px">Cole aqui o texto do comprovativo recebido do M-Pesa ou e-Mola após efectuar a transferência.</p>
+        <textarea id="comprovativo" style="width:100%;background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:'Montserrat',sans-serif;font-size:12px;padding:12px;outline:none;resize:vertical;min-height:100px;line-height:1.6" placeholder="Ex: Confirmado DCN6JIZ25T8. Transferiste 5,000MT de 258843795522..."></textarea>
+        <p id="comprErr" style="display:none;font-size:10px;color:#C97A4C;letter-spacing:1px;margin-top:6px;text-align:center"></p>
+      </div>
+
+      <button class="confirm-btn" onclick="submitRSVP()">Enviar para Confirmação →</button>
     </div>
-    <div class="success-msg" id="successMsg">
-      <div class="success-icon">✓</div>
-      <p class="success-title">Cadastro Confirmado</p>
-      <p class="success-sub" id="successSubText"></p>
-      <div id="registoResumo" style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:16px;text-align:left;line-height:2">
-        <p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Resumo do Registo</p>
-        <div id="resumoContent" style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--off-white);opacity:.8"></div>
+
+    <!-- ESTADO PENDENTE -->
+    <div id="pendingMsg" style="display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;width:100%">
+      <div style="width:60px;height:60px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px">⏳</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);font-weight:300">Em Análise</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--off-white);opacity:.5;line-height:1.8;max-width:300px">O teu pedido foi enviado para confirmação. Receberás uma mensagem no WhatsApp quando o teu cadastro for activado.</p>
+      <div style="border:1px solid #2a2a2a;padding:16px 24px;background:#0f0d08;width:100%">
+        <p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:6px">Código Provisório</p>
+        <p id="pendingCode" style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);letter-spacing:6px">—</p>
+        <p style="font-size:10px;color:var(--off-white);opacity:.3;letter-spacing:1px;margin-top:4px">Guarda este código — será confirmado em breve</p>
       </div>
-      <div class="code-box">
-        <div class="code-label">Código de Entrada</div>
-        <div class="code-value" id="accessCode">—</div>
+      <div class="warn-box">
+        <p>⚠️ O cadastro só fica completo após confirmação pelo anfitrião. Prazo: até 20 de Abril de 2026.</p>
       </div>
-      <p style="font-size:10px;color:var(--off-white);opacity:.3;letter-spacing:2px;text-transform:uppercase;margin-top:4px">Apresente na entrada · 09.05.2026</p>
-      <div style="width:100%;background:#0f0d08;border:1px solid #2a2a2a;padding:12px 16px;margin-top:8px;text-align:left">
-        <p style="font-size:10px;letter-spacing:1px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:6px">Próximo Passo — Importante</p>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.7;line-height:1.9">
-          Efectue a transferência do presente para:<br><br>
-          <strong style="color:var(--gold)">Abel Alfredo Dengo Junior</strong><br><br>
-          📱 <strong style="color:var(--off-white)">M-Pesa:</strong> 843 795 522<br>
-          💳 <strong style="color:var(--off-white)">e-Mola:</strong> 873 795 522<br><br>
-          Após a transferência, envie o <strong style="color:var(--gold)">comprovativo + o seu código acima</strong> para o WhatsApp <strong style="color:var(--off-white)">873 795 522</strong> para confirmar o cadastro.<br><br>
-          <em style="font-size:12px;opacity:.5">O cadastro só é válido após confirmação pelo anfitrião. Verifique sempre o nome do destinatário antes de transferir.</em>
-        </p>
-      </div>
-      <button class="nav-btn" style="margin-top:8px;width:100%" onclick="shareWhatsApp()">Enviar Comprovativo via WhatsApp →</button>
     </div>
+
     <button class="back-link" style="margin-top:16px" onclick="goTo(6)">← Voltar</button>
   </div>
   <div class="progress"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div></div>
@@ -698,7 +706,48 @@ function logoutAdmin(){
 async function mostrarPainel(){
   document.getElementById('adminLoginBox').style.display='none';
   document.getElementById('adminPainel').style.display='block';
+  await renderPendentes();
   await renderGuestList();
+}
+
+async function fetchPendentes(){
+  try{
+    const r=await fetch('https://aniversario-abel-dengo-default-rtdb.firebaseio.com/pendentes.json');
+    const data=await r.json();
+    if(!data)return[];
+    return Object.entries(data).map(function(e){return{key:e[0],...e[1]};}).filter(function(p){return p.status==='pendente';});
+  }catch(e){return[];}
+}
+
+async function renderPendentes(){
+  const el=document.getElementById('pendingList');
+  const count=document.getElementById('pendingCount');
+  if(!el)return;
+  el.innerHTML='<p style="font-family:\'Cormorant Garamond\',serif;font-size:13px;color:var(--off-white);opacity:.3;text-align:center;padding:12px">A carregar...</p>';
+  const list=await fetchPendentes();
+  count.textContent=list.length;
+  if(!list.length){
+    el.innerHTML='<p style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:.3;text-align:center;padding:16px">Nenhum pedido pendente</p>';
+    return;
+  }
+  el.innerHTML=list.map(function(p){
+    return '<div class="guest-item" style="flex-direction:column;align-items:flex-start;gap:8px">'+
+      '<div style="width:100%">'+
+        '<p class="guest-item-name">'+p.name+(p.companion&&p.companion!=='—'?' & '+p.companion:'')+'</p>'+
+        '<p class="guest-item-code">'+p.code+' · '+p.pessoas+' · '+p.amount.toLocaleString('pt-MZ')+' MZN via '+p.payment+'</p>'+
+        '<p class="guest-item-code" style="color:var(--off-white);opacity:.5">📱 '+p.phone+' · 🌿 '+p.zone+'</p>'+
+        '<p style="font-size:10px;color:var(--off-white);opacity:.4;margin-top:4px;line-height:1.5;font-family:Montserrat,sans-serif">'+p.comprovativo.slice(0,120)+'...</p>'+
+      '</div>'+
+      '<div style="display:flex;gap:8px;width:100%">'+
+        '<button class="guest-item-copy" style="flex:1;background:#0d1f0d;border-color:#2a4a2a;color:#6abf6a" '+
+          'onclick="activarCadastro(\''+p.code+'\',\''+p.phone+'\',\''+p.name+'\',\''+p.companion+'\',\''+p.zone+'\','+p.amount+',\''+p.payment+'\',\''+p.drinks+'\')">'+
+          '✅ Activar</button>'+
+        '<button class="guest-item-copy" style="flex:1;background:#1f0d0d;border-color:#4a2a2a;color:#bf6a6a" '+
+          'onclick="rejeitarCadastro(\''+p.code+'\',\''+p.phone+'\',\''+p.name+'\')">'+
+          '❌ Rejeitar</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
 }
 
 function gerarCodigo(nome){
@@ -934,14 +983,83 @@ function checkPayReady(){
 function goToRSVP(){
   var minVal=withCompanion?7000:3000;
   if(!selectedAmount||selectedAmount<minVal||!selectedPayment)return;
+
   var guestName=withCompanion?(document.getElementById('guestNameDuo')||{value:''}).value.trim():(document.getElementById('soloName')||{value:''}).value.trim();
   var comp=withCompanion?(document.getElementById('companionName')||{value:''}).value.trim():'';
-  document.getElementById('paymentSummary').innerHTML=
-    '<p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:8px">Resumo</p>'+
-    '👤 '+(guestName||'—')+(comp?' & '+comp:'')+'\n<br>'+
-    '👥 '+(withCompanion?'2 pessoas':'1 pessoa')+'<br>'+
-    '💰 <strong style="color:var(--gold)">'+selectedAmount.toLocaleString('pt-MZ')+' MZN</strong><br>'+
-    '💳 '+selectedPayment+'<br>🌿 '+(selectedZone||'Não selecionado');
+
+  // Verificar etapas em falta
+  var etapasPendentes=[];
+  if(!guestName) etapasPendentes.push('O seu nome');
+  if(withCompanion&&!comp) etapasPendentes.push('Nome do acompanhante');
+  if(!selectedZone) etapasPendentes.push('Escolha do ambiente');
+
+  // Verificar bebidas seleccionadas
+  var temBebidas=DRINKS.some(function(d){return drinkEntries[d.id]&&drinkEntries[d.id].length>0;});
+
+  // Construir resumo
+  var resumoHtml='<p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:10px">Resumo do Cadastro</p>';
+
+  // Etapa 1 — Ambiente
+  resumoHtml+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+    '<span style="font-size:14px">'+(selectedZone?'✅':'⚠️')+'</span>'+
+    '<span style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:'+(selectedZone?'.8':'.4')+'">'+
+    'Ambiente: '+(selectedZone||'<em>Não seleccionado</em>')+
+    '</span></div>';
+
+  // Etapa 2 — Bebidas
+  resumoHtml+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+    '<span style="font-size:14px">'+(temBebidas?'✅':'⚠️')+'</span>'+
+    '<span style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:'+(temBebidas?'.8':'.4')+'">'+
+    'Preferências de bebidas: '+(temBebidas?'Seleccionadas':'<em>Não seleccionadas</em>')+
+    '</span></div>';
+
+  // Etapa 3 — Nome
+  resumoHtml+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+    '<span style="font-size:14px">'+(guestName?'✅':'⚠️')+'</span>'+
+    '<span style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:'+(guestName?'.8':'.4')+'">'+
+    'Nome: '+(guestName||'<em>Não preenchido</em>')+
+    (comp?' & '+comp:'')+
+    '</span></div>';
+
+  // Etapa 4 — Presente
+  resumoHtml+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+    '<span style="font-size:14px">✅</span>'+
+    '<span style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:.8">'+
+    'Presente: <strong style="color:var(--gold)">'+selectedAmount.toLocaleString('pt-MZ')+' MZN</strong> via '+selectedPayment+
+    '</span></div>';
+
+  // Aviso de etapas pendentes
+  if(etapasPendentes.length>0){
+    resumoHtml+='<div style="border:1px solid #8B4A2A;background:#1a0d08;padding:12px;margin-top:8px;border-radius:2px">'+
+      '<p style="font-size:10px;color:#C97A4C;letter-spacing:.5px;line-height:1.7;text-align:center">'+
+      '⚠️ Para concluir o registo, complete as seguintes etapas:<br>'+
+      etapasPendentes.map(function(e){return '• '+e;}).join('<br>')+
+      '</p>'+
+      '<button onclick="goTo(6)" style="width:100%;background:transparent;border:1px solid #C97A4C;color:#C97A4C;font-family:Montserrat,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:8px">← Voltar e Completar</button>'+
+      '</div>';
+  } else {
+    resumoHtml+='<div style="border:1px solid #2a4a2a;background:#0d1a0d;padding:10px;margin-top:8px">'+
+      '<p style="font-size:10px;color:#6abf6a;letter-spacing:.5px;text-align:center">'+
+      '✅ Todas as etapas concluídas! Cole o comprovativo e confirme abaixo.'+
+      '</p></div>';
+  }
+
+  document.getElementById('paymentSummary').innerHTML=resumoHtml;
+
+  // Se tiver etapas pendentes, desactivar o botão de confirmar
+  var confirmBtn=document.querySelector('#rsvpForm .confirm-btn');
+  if(confirmBtn){
+    if(etapasPendentes.length>0){
+      confirmBtn.disabled=true;
+      confirmBtn.style.opacity='.4';
+      confirmBtn.style.cursor='not-allowed';
+    } else {
+      confirmBtn.disabled=false;
+      confirmBtn.style.opacity='1';
+      confirmBtn.style.cursor='pointer';
+    }
+  }
+
   goTo(7);
 }
 
@@ -952,9 +1070,86 @@ function copyText(btn,text){
   });
 }
 
-function submitRSVP(){
+// ── VALIDAÇÃO DO COMPROVATIVO ──
+function validarComprovativo(texto, metodo){
+  if(!texto||texto.trim().length<20) return {ok:false, msg:'O comprovativo parece incompleto. Cole o texto completo recebido.'};
+  const t=texto.toLowerCase();
+
+  // Verificar datas válidas (entre 23/03/2026 e 23/04/2026)
+  const meses=['01','02','03','04','05','06','07','08','09','10','11','12'];
+  const temData=(
+    t.includes('23/3')||t.includes('23/03')||
+    t.includes('24/3')||t.includes('24/03')||
+    t.includes('25/3')||t.includes('25/03')||
+    t.includes('26/3')||t.includes('26/03')||
+    t.includes('27/3')||t.includes('27/03')||
+    t.includes('28/3')||t.includes('28/03')||
+    t.includes('29/3')||t.includes('29/03')||
+    t.includes('30/3')||t.includes('30/03')||
+    t.includes('31/3')||t.includes('31/03')||
+    t.includes('1/4')||t.includes('01/04')||
+    t.includes('2/4')||t.includes('02/04')||
+    t.includes('3/4')||t.includes('03/04')||
+    t.includes('4/4')||t.includes('04/04')||
+    t.includes('5/4')||t.includes('05/04')||
+    t.includes('6/4')||t.includes('06/04')||
+    t.includes('7/4')||t.includes('07/04')||
+    t.includes('8/4')||t.includes('08/04')||
+    t.includes('9/4')||t.includes('09/04')||
+    t.includes('10/4')||t.includes('10/04')||
+    t.includes('11/4')||t.includes('11/04')||
+    t.includes('12/4')||t.includes('12/04')||
+    t.includes('13/4')||t.includes('13/04')||
+    t.includes('14/4')||t.includes('14/04')||
+    t.includes('15/4')||t.includes('15/04')||
+    t.includes('16/4')||t.includes('16/04')||
+    t.includes('17/4')||t.includes('17/04')||
+    t.includes('18/4')||t.includes('18/04')||
+    t.includes('19/4')||t.includes('19/04')||
+    t.includes('20/4')||t.includes('20/04')||
+    t.includes('21/4')||t.includes('21/04')||
+    t.includes('22/4')||t.includes('22/04')||
+    t.includes('23/4')||t.includes('23/04')||
+    // formatos alternativos
+    t.includes('2026')||t.includes('26')
+  );
+  if(!temData) return {ok:false, msg:'A data do comprovativo não está no prazo válido (23 Março — 23 Abril 2026).'};
+
+  // Verificar número de destino
+  if(metodo==='M-Pesa'){
+    if(!t.includes('843795522')&&!t.includes('843 795 522')&&!t.includes('m-pesa')&&!t.includes('mpesa'))
+      return {ok:false, msg:'O comprovativo não parece ser do M-Pesa para o número correcto (843 795 522).'};
+  }
+  if(metodo==='e-Mola'){
+    if(!t.includes('873795522')&&!t.includes('873 795 522')&&!t.includes('e-mola')&&!t.includes('emola'))
+      return {ok:false, msg:'O comprovativo não parece ser do e-Mola para o número correcto (873 795 522).'};
+  }
+
+  // Verificar palavras-chave de transferência
+  const temPalavraChave=t.includes('transferiste')||t.includes('confirmado')||t.includes('transferência')||t.includes('sucesso')||t.includes('pago')||t.includes('mt')||t.includes('mzn');
+  if(!temPalavraChave) return {ok:false, msg:'O texto não parece ser um comprovativo válido. Certifica-te de copiar a mensagem completa.'};
+
+  return {ok:true};
+}
+
+// ── GUARDAR PENDENTE NO FIREBASE ──
+async function savePendingFirebase(data){
+  try{
+    const key='pend-'+Date.now();
+    await fetch('https://aniversario-abel-dengo-default-rtdb.firebaseio.com/pendentes/'+key+'.json',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+    return true;
+  }catch(e){return false;}
+}
+
+async function submitRSVP(){
   var phone=document.getElementById('guestPhone').value.trim();
+  var comprovativo=document.getElementById('comprovativo').value.trim();
   var guestName='',comp='';
+
   if(withCompanion){
     guestName=(document.getElementById('guestNameDuo')||{value:''}).value.trim();
     comp=(document.getElementById('companionName')||{value:''}).value.trim();
@@ -965,15 +1160,27 @@ function submitRSVP(){
     if(!guestName){alert('Por favor, insira o seu nome.');return;}
   }
   if(!phone){alert('Por favor, insira o seu WhatsApp / Telemóvel.');return;}
+
+  // Validar comprovativo
+  const errEl=document.getElementById('comprErr');
+  if(!comprovativo){
+    errEl.textContent='Por favor, cole o comprovativo da transferência.';
+    errEl.style.display='block';
+    return;
+  }
+  const validacao=validarComprovativo(comprovativo,selectedPayment);
+  if(!validacao.ok){
+    errEl.textContent=validacao.msg;
+    errEl.style.display='block';
+    return;
+  }
+  errEl.style.display='none';
+
+  // Gerar código provisório
   var n=guestName.slice(0,2).toUpperCase().replace(/\s/g,'');
   var code=n+'-'+(selectedZoneCode||'GE')+'-'+Math.floor(1000+Math.random()*9000);
-  document.getElementById('accessCode').textContent=code;
-  document.getElementById('successSubText').textContent=
-    withCompanion&&comp?'Bem-vindos à festa: '+guestName+' & '+comp:'Seja bem-vindo(a), '+guestName+'. A sua noite começa aqui.';
-  document.getElementById('rsvpForm').style.display='none';
-  document.getElementById('successMsg').classList.add('show');
-  window._code=code;window._name=guestName;window._comp=comp;window._phone=phone;
 
+  // Recolher bebidas
   var drinks=[];
   DRINKS.forEach(function(d){
     drinkEntries[d.id].forEach(function(eid){
@@ -983,54 +1190,125 @@ function submitRSVP(){
       drinks.push(d.name+(brand?' — '+brand:'')+' · '+qty+' '+unit);
     });
   });
-  window._drinks=drinks;
 
-  var resumo=document.getElementById('resumoContent');
-  if(resumo){
-    var html='👤 <strong style="color:var(--gold)">'+guestName+'</strong><br>';
-    if(comp)html+='🤝 <strong style="color:var(--gold)">'+comp+'</strong><br>';
-    html+='📱 '+phone+'<br>';
-    html+='🌿 '+(selectedZone||'—')+'<br>';
-    html+='💰 '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'<br>';
-    if(drinks.length){
-      html+='<br><span style="font-size:10px;letter-spacing:2px;color:var(--gold);opacity:.6;text-transform:uppercase">Preferências de Bebidas</span><br>';
-      drinks.forEach(function(d){html+='🍹 '+d+'<br>';});
-    }
-    resumo.innerHTML=html;
-  }
+  // Guardar no Firebase como pendente
+  var pendingData={
+    code:code,
+    name:guestName,
+    companion:comp||'—',
+    phone:phone,
+    pessoas:withCompanion?'2 pessoas':'1 pessoa',
+    zone:selectedZone||'—',
+    amount:selectedAmount,
+    payment:selectedPayment,
+    drinks:drinks.join(' | ')||'—',
+    comprovativo:comprovativo,
+    timestamp:new Date().toLocaleString('pt-MZ'),
+    status:'pendente'
+  };
 
-  sendToSheets(guestName,phone,comp,withCompanion?'2 pessoas':'1 pessoa',selectedZone||'—',drinks.join(' | ')||'—',selectedAmount,selectedPayment,code);
+  var btn=document.querySelector('#rsvpForm .confirm-btn');
+  btn.textContent='A enviar...';btn.disabled=true;
+
+  var ok=await savePendingFirebase(pendingData);
+  btn.textContent='Enviar para Confirmação →';btn.disabled=false;
+
+  if(!ok){alert('Erro ao enviar. Verifica a ligação e tenta novamente.');return;}
+
+  // Mostrar estado pendente
+  document.getElementById('rsvpForm').style.display='none';
+  var pm=document.getElementById('pendingMsg');
+  pm.style.display='flex';
+  document.getElementById('pendingCode').textContent=code;
+
+  // Enviar notificação ao Abel via WhatsApp
+  window._code=code;window._name=guestName;window._comp=comp;window._phone=phone;window._drinks=drinks;
+  notificarAbel(pendingData);
+}
+
+function notificarAbel(d){
+  var drinks=d.drinks||'—';
+  var msg=encodeURIComponent(
+    '🔔 *Novo Pedido de Cadastro*\n\n'+
+    '👤 *Nome:* '+d.name+'\n'+
+    (d.companion!=='—'?'🤝 *Acompanhante:* '+d.companion+'\n':'')+
+    '📱 *WhatsApp:* '+d.phone+'\n'+
+    '👥 '+d.pessoas+'\n'+
+    '🌿 *Ambiente:* '+d.zone+'\n'+
+    '🍹 *Bebidas:* '+drinks+'\n'+
+    '💰 *Valor:* '+d.amount.toLocaleString('pt-MZ')+' MZN via '+d.payment+'\n'+
+    '🔐 *Código:* '+d.code+'\n\n'+
+    '📋 *Comprovativo:*\n'+d.comprovativo+'\n\n'+
+    '✅ Para ACTIVAR: responde ACTIVAR '+d.code+'\n'+
+    '❌ Para REJEITAR: responde REJEITAR '+d.code
+  );
+  window.open('https://wa.me/258873795522?text='+msg,'_blank');
 }
 
 function sendToSheets(name,phone,companion,pessoas,zone,drinks,amount,payment,code){
-  var payload={
-    timestamp:new Date().toLocaleString('pt-MZ'),
-    name:name,phone:phone,companion:companion||'—',
-    pessoas:pessoas,zone:zone,drinks:drinks,
-    amount:amount,payment:payment,code:code
-  };
+  var payload={timestamp:new Date().toLocaleString('pt-MZ'),name:name,phone:phone,companion:companion||'—',pessoas:pessoas,zone:zone,drinks:drinks,amount:amount,payment:payment,code:code};
   var url=SHEETS_URL;
   var encoded=Object.keys(payload).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(payload[k]);}).join('&');
   fetch(url+'?'+encoded,{method:'GET',mode:'no-cors'}).catch(function(){});
 }
 
-function shareWhatsApp(){
-  var drinks=(window._drinks&&window._drinks.length)?window._drinks.join('\n'):'Não especificado';
+// ── ACTIVAR/REJEITAR NO ADMIN ──
+async function activarCadastro(code,phone,name,comp,zone,amount,payment,drinks){
+  try{
+    // Actualizar status no Firebase
+    const keys=await fetch('https://aniversario-abel-dengo-default-rtdb.firebaseio.com/pendentes.json');
+    const data=await keys.json();
+    if(data){
+      Object.keys(data).forEach(async function(k){
+        if(data[k].code===code){
+          await fetch('https://aniversario-abel-dengo-default-rtdb.firebaseio.com/pendentes/'+k+'/status.json',{
+            method:'PUT',headers:{'Content-Type':'application/json'},body:'"activo"'
+          });
+        }
+      });
+    }
+  }catch(e){}
+
+  // Enviar mensagem de confirmação ao convidado via WhatsApp
   var msg=encodeURIComponent(
-    '🎉 *Confirmação — Abel Dengo Jr 31 Anos*\n\n'+
-    '👤 *Convidado:* '+(window._name||'')+'\n'+
-    (window._comp?'🤝 *Acompanhante:* '+window._comp+'\n':'')+
-    '👥 '+(withCompanion?'2 pessoas':'1 pessoa')+'\n'+
-    '📱 '+(window._phone||'')+'\n'+
-    '📅 09 Maio 2026 · 20h00\n'+
-    '📍 Upsen Garden\n'+
-    '🌿 '+(selectedZone||'—')+'\n\n'+
-    '🍹 *Preferências de Bebidas:*\n'+drinks+'\n\n'+
-    '💰 *Presente:* '+selectedAmount.toLocaleString('pt-MZ')+' MZN via '+selectedPayment+'\n\n'+
-    '🔐 *Código de Entrada: '+(window._code||'---')+'*\n\n'+
-    '_Segue em anexo o comprovativo do presente._'
+    '✅ *Cadastro Confirmado — Abel Dengo Jr 31 Anos*\n\n'+
+    'Olá '+name+'! O teu cadastro foi confirmado.\n\n'+
+    '🔐 *Código de Entrada: '+code+'*\n'+
+    '🌿 Ambiente: '+zone+'\n'+
+    '📅 09 de Maio de 2026 · 20h00\n'+
+    '📍 Upsen Garden\n\n'+
+    'Apresenta este código na entrada. Até breve! 🥂'
   );
-  window.open('https://wa.me/258873795522?text='+msg,'_blank');
+  window.open('https://wa.me/258'+phone.replace(/\D/g,'')+'?text='+msg,'_blank');
+
+  await renderPendentes();
+  await renderGuestList();
+}
+
+async function rejeitarCadastro(code,phone,name){
+  try{
+    const keys=await fetch('https://aniversario-abel-dengo-default-rtdb.firebaseio.com/pendentes.json');
+    const data=await keys.json();
+    if(data){
+      Object.keys(data).forEach(async function(k){
+        if(data[k].code===code){
+          await fetch('https://aniversario-abel-dengo-default-rtdb.firebaseio.com/pendentes/'+k+'/status.json',{
+            method:'PUT',headers:{'Content-Type':'application/json'},body:'"rejeitado"'
+          });
+        }
+      });
+    }
+  }catch(e){}
+
+  var msg=encodeURIComponent(
+    '❌ *Cadastro Não Confirmado — Abel Dengo Jr 31 Anos*\n\n'+
+    'Olá '+name+', o teu cadastro não foi confirmado.\n'+
+    'Para mais informações contacta o anfitrião.\n\n'+
+    'WhatsApp: 873 795 522'
+  );
+  window.open('https://wa.me/258'+phone.replace(/\D/g,'')+'?text='+msg,'_blank');
+  await renderPendentes();
+  await renderGuestList();
 }
 
 function updateCountdown(){
