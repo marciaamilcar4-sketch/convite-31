@@ -474,14 +474,28 @@ body{display:flex;flex-direction:column;align-items:center}
     <div id="pendingMsg" style="display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;width:100%">
       <div style="width:60px;height:60px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px">⏳</div>
       <p style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);font-weight:300">Em Análise</p>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--off-white);opacity:.5;line-height:1.8;max-width:300px">O teu pedido foi enviado para confirmação. Receberás uma mensagem no WhatsApp quando o teu cadastro for activado.</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--off-white);opacity:.5;line-height:1.8;max-width:300px">O teu pedido foi guardado. Clica no botão abaixo para enviar o comprovativo ao anfitrião via WhatsApp.</p>
+
       <div style="border:1px solid #2a2a2a;padding:16px 24px;background:#0f0d08;width:100%">
         <p style="font-size:9px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:6px">Código Provisório</p>
         <p id="pendingCode" style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);letter-spacing:6px">—</p>
         <p style="font-size:10px;color:var(--off-white);opacity:.3;letter-spacing:1px;margin-top:4px">Guarda este código — será confirmado em breve</p>
       </div>
+
+      <!-- BOTÃO WHATSAPP — obrigatório clicar -->
+      <button id="btnEnviarWhatsapp" class="nav-btn" style="width:100%;background:#25D366;border:none;color:#000" onclick="enviarParaAbel()">
+        📱 Enviar Comprovativo ao Anfitrião →
+      </button>
+
+      <div style="border:1px solid #2a4a2a;background:#0d1a0d;padding:12px;width:100%">
+        <p style="font-size:10px;color:#6abf6a;letter-spacing:.5px;line-height:1.7;text-align:center">
+          ✅ Clica no botão acima para enviar o comprovativo.<br>
+          O cadastro só fica completo após confirmação pelo anfitrião.
+        </p>
+      </div>
+
       <div class="warn-box">
-        <p>⚠️ O cadastro só fica completo após confirmação pelo anfitrião. Prazo: até 20 de Abril de 2026.</p>
+        <p>⚠️ Prazo para confirmação: até 20 de Abril de 2026.</p>
       </div>
     </div>
 
@@ -1072,63 +1086,9 @@ function copyText(btn,text){
 
 // ── VALIDAÇÃO DO COMPROVATIVO ──
 function validarComprovativo(texto, metodo){
-  if(!texto||texto.trim().length<20) return {ok:false, msg:'O comprovativo parece incompleto. Cole o texto completo recebido.'};
-  const t=texto.toLowerCase();
-
-  // Verificar datas válidas (entre 23/03/2026 e 23/04/2026)
-  const meses=['01','02','03','04','05','06','07','08','09','10','11','12'];
-  const temData=(
-    t.includes('23/3')||t.includes('23/03')||
-    t.includes('24/3')||t.includes('24/03')||
-    t.includes('25/3')||t.includes('25/03')||
-    t.includes('26/3')||t.includes('26/03')||
-    t.includes('27/3')||t.includes('27/03')||
-    t.includes('28/3')||t.includes('28/03')||
-    t.includes('29/3')||t.includes('29/03')||
-    t.includes('30/3')||t.includes('30/03')||
-    t.includes('31/3')||t.includes('31/03')||
-    t.includes('1/4')||t.includes('01/04')||
-    t.includes('2/4')||t.includes('02/04')||
-    t.includes('3/4')||t.includes('03/04')||
-    t.includes('4/4')||t.includes('04/04')||
-    t.includes('5/4')||t.includes('05/04')||
-    t.includes('6/4')||t.includes('06/04')||
-    t.includes('7/4')||t.includes('07/04')||
-    t.includes('8/4')||t.includes('08/04')||
-    t.includes('9/4')||t.includes('09/04')||
-    t.includes('10/4')||t.includes('10/04')||
-    t.includes('11/4')||t.includes('11/04')||
-    t.includes('12/4')||t.includes('12/04')||
-    t.includes('13/4')||t.includes('13/04')||
-    t.includes('14/4')||t.includes('14/04')||
-    t.includes('15/4')||t.includes('15/04')||
-    t.includes('16/4')||t.includes('16/04')||
-    t.includes('17/4')||t.includes('17/04')||
-    t.includes('18/4')||t.includes('18/04')||
-    t.includes('19/4')||t.includes('19/04')||
-    t.includes('20/4')||t.includes('20/04')||
-    t.includes('21/4')||t.includes('21/04')||
-    t.includes('22/4')||t.includes('22/04')||
-    t.includes('23/4')||t.includes('23/04')||
-    // formatos alternativos
-    t.includes('2026')||t.includes('26')
-  );
-  if(!temData) return {ok:false, msg:'A data do comprovativo não está no prazo válido (23 Março — 23 Abril 2026).'};
-
-  // Verificar número de destino
-  if(metodo==='M-Pesa'){
-    if(!t.includes('843795522')&&!t.includes('843 795 522')&&!t.includes('m-pesa')&&!t.includes('mpesa'))
-      return {ok:false, msg:'O comprovativo não parece ser do M-Pesa para o número correcto (843 795 522).'};
+  if(!texto||texto.trim().length<5){
+    return {ok:false, msg:'Por favor, cole o comprovativo da transferência.'};
   }
-  if(metodo==='e-Mola'){
-    if(!t.includes('873795522')&&!t.includes('873 795 522')&&!t.includes('e-mola')&&!t.includes('emola'))
-      return {ok:false, msg:'O comprovativo não parece ser do e-Mola para o número correcto (873 795 522).'};
-  }
-
-  // Verificar palavras-chave de transferência
-  const temPalavraChave=t.includes('transferiste')||t.includes('confirmado')||t.includes('transferência')||t.includes('sucesso')||t.includes('pago')||t.includes('mt')||t.includes('mzn');
-  if(!temPalavraChave) return {ok:false, msg:'O texto não parece ser um comprovativo válido. Certifica-te de copiar a mensagem completa.'};
-
   return {ok:true};
 }
 
@@ -1227,22 +1187,36 @@ async function submitRSVP(){
 }
 
 function notificarAbel(d){
-  var drinks=d.drinks||'—';
+  // Guardar dados para o botão usar
+  window._pendingData=d;
+}
+
+function enviarParaAbel(){
+  var d=window._pendingData;
+  if(!d)return;
   var msg=encodeURIComponent(
-    '🔔 *Novo Pedido de Cadastro*\n\n'+
+    '🔔 *Novo Pedido de Cadastro — Abel Dengo Jr 31*\n\n'+
     '👤 *Nome:* '+d.name+'\n'+
-    (d.companion!=='—'?'🤝 *Acompanhante:* '+d.companion+'\n':'')+
+    (d.companion&&d.companion!=='—'?'🤝 *Acompanhante:* '+d.companion+'\n':'')+
     '📱 *WhatsApp:* '+d.phone+'\n'+
     '👥 '+d.pessoas+'\n'+
     '🌿 *Ambiente:* '+d.zone+'\n'+
-    '🍹 *Bebidas:* '+drinks+'\n'+
+    '🍹 *Bebidas:* '+d.drinks+'\n'+
     '💰 *Valor:* '+d.amount.toLocaleString('pt-MZ')+' MZN via '+d.payment+'\n'+
     '🔐 *Código:* '+d.code+'\n\n'+
     '📋 *Comprovativo:*\n'+d.comprovativo+'\n\n'+
-    '✅ Para ACTIVAR: responde ACTIVAR '+d.code+'\n'+
-    '❌ Para REJEITAR: responde REJEITAR '+d.code
+    '_Aguarda confirmação no painel admin._'
   );
   window.open('https://wa.me/258873795522?text='+msg,'_blank');
+
+  // Actualizar botão
+  var btn=document.getElementById('btnEnviarWhatsapp');
+  if(btn){
+    btn.textContent='✅ Comprovativo Enviado';
+    btn.style.background='var(--gold)';
+    btn.style.color='var(--black)';
+    btn.disabled=true;
+  }
 }
 
 function sendToSheets(name,phone,companion,pessoas,zone,drinks,amount,payment,code){
@@ -1255,7 +1229,6 @@ function sendToSheets(name,phone,companion,pessoas,zone,drinks,amount,payment,co
 // ── ACTIVAR/REJEITAR NO ADMIN ──
 async function activarCadastro(code,phone,name,comp,zone,amount,payment,drinks){
   try{
-    // Actualizar status no Firebase
     const keys=await fetch('https://aniversario-abel-dengo-default-rtdb.firebaseio.com/pendentes.json');
     const data=await keys.json();
     if(data){
@@ -1269,7 +1242,7 @@ async function activarCadastro(code,phone,name,comp,zone,amount,payment,drinks){
     }
   }catch(e){}
 
-  // Enviar mensagem de confirmação ao convidado via WhatsApp
+  // Construir link WhatsApp
   var msg=encodeURIComponent(
     '✅ *Cadastro Confirmado — Abel Dengo Jr 31 Anos*\n\n'+
     'Olá '+name+'! O teu cadastro foi confirmado.\n\n'+
@@ -1279,7 +1252,10 @@ async function activarCadastro(code,phone,name,comp,zone,amount,payment,drinks){
     '📍 Upsen Garden\n\n'+
     'Apresenta este código na entrada. Até breve! 🥂'
   );
-  window.open('https://wa.me/258'+phone.replace(/\D/g,'')+'?text='+msg,'_blank');
+  var waLink='https://wa.me/258'+phone.replace(/\D/g,'')+'?text='+msg;
+
+  // Mostrar botão para enviar — não abre automaticamente
+  mostrarBotaoWhatsapp(name,'✅ Activado!','Clica para enviar confirmação a '+name,waLink,'#0d1f0d','#6abf6a');
 
   await renderPendentes();
   await renderGuestList();
@@ -1306,9 +1282,32 @@ async function rejeitarCadastro(code,phone,name){
     'Para mais informações contacta o anfitrião.\n\n'+
     'WhatsApp: 873 795 522'
   );
-  window.open('https://wa.me/258'+phone.replace(/\D/g,'')+'?text='+msg,'_blank');
+  var waLink='https://wa.me/258'+phone.replace(/\D/g,'')+'?text='+msg;
+
+  mostrarBotaoWhatsapp(name,'❌ Rejeitado!','Clica para notificar '+name,waLink,'#1f0d0d','#bf6a6a');
+
   await renderPendentes();
   await renderGuestList();
+}
+
+function mostrarBotaoWhatsapp(name,titulo,descricao,link,bg,cor){
+  // Remover popup anterior se existir
+  var existing=document.getElementById('waPopup');
+  if(existing)existing.remove();
+
+  var div=document.createElement('div');
+  div.id='waPopup';
+  div.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px';
+  div.innerHTML=
+    '<div style="background:#111;border:1px solid var(--gold);padding:28px;max-width:340px;width:100%;text-align:center;display:flex;flex-direction:column;gap:16px">'+
+      '<p style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:var(--gold);font-weight:300">'+titulo+'</p>'+
+      '<p style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:var(--off-white);opacity:.6;font-style:italic">'+descricao+'</p>'+
+      '<a href="'+link+'" target="_blank" style="display:block;background:#25D366;color:#000;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:16px;text-decoration:none;text-align:center" onclick="document.getElementById(\'waPopup\').remove()">'+
+        '📱 Abrir WhatsApp →'+
+      '</a>'+
+      '<button onclick="document.getElementById(\'waPopup\').remove()" style="background:transparent;border:1px solid #2a2a2a;color:var(--off-white);font-family:Montserrat,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:12px;cursor:pointer;opacity:.5">Fechar</button>'+
+    '</div>';
+  document.body.appendChild(div);
 }
 
 function updateCountdown(){
