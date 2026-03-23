@@ -323,15 +323,15 @@ body{display:flex;flex-direction:column;align-items:center}
   <div class="section-wrap" style="padding-top:48px">
     <p class="invite-label">Personalize a Sua Experiência</p>
     <p class="section-title">Área de Consumo</p>
-    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Indique as suas preferências de bebidas para que possamos preparar tudo para si. Não há qualquer custo é apenas para organização.</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--off-white);opacity:.4;line-height:1.7;text-align:center;max-width:320px">Indique as suas preferências de bebidas para que possamos preparar tudo para si. Não há qualquer custo — é apenas para organização.</p>
     <div class="drink-list" id="drinkList"></div>
     <div class="bottom-nav">
       <button class="nav-btn" onclick="goTo(5)">Ver Menu →</button>
       <button class="back-link" onclick="goTo(3)">← Voltar</button>
-    </div>​​
-  </div>​​
-  < div  class = " progress" > < div class  = " dot " > </div> < div class = " dot " > </div> < div class  = " dot active " > </div> < div class = " dot " > </div> < div class = " dot " > </div> < div class = " dot " > </div> </div>    
-</div>​​
+    </div>
+  </div>
+  <div class="progress"><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+</div>
 
 <!-- S5: MENU -->
 <div class="screen" id="s5">
@@ -585,7 +585,7 @@ async function initApp(){
 
   const result=await validateCode(code);
 
-  // Código não existe
+  // Código não existe no Firebase
   if(!result.valid){
     showAcessoNegado('Este convite não é válido.');
     return;
@@ -595,21 +595,43 @@ async function initApp(){
   const deviceId=getDeviceId();
   const registeredDevice=data.device||null;
 
-  // Nenhum dispositivo registado ainda — este é o primeiro acesso
+  // Verificar se este dispositivo já aceitou este código antes
+  const myAcceptedCodes=JSON.parse(localStorage.getItem('adj31_meus_codigos')||'[]');
+  const jaTenhoEsteCode=myAcceptedCodes.includes(code);
+
+  // CASO 1: Tenho o código no localStorage — sou o convidado original
+  // Abre sempre, independentemente do que esteja no Firebase
+  if(jaTenhoEsteCode){
+    // Actualizar o device no Firebase caso tenha mudado (ex: apagou cache)
+    if(registeredDevice!==deviceId){
+      await registerDevice(code,deviceId);
+    }
+    showScreen('s1');
+    return;
+  }
+
+  // CASO 2: Nenhum dispositivo registado ainda — primeiro acesso
   if(!registeredDevice){
     await registerDevice(code,deviceId);
+    myAcceptedCodes.push(code);
+    localStorage.setItem('adj31_meus_codigos',JSON.stringify(myAcceptedCodes));
     showScreen('s1');
     return;
   }
 
-  // Dispositivo registado é o mesmo — convidado original
+  // CASO 3: Dispositivo registado é o mesmo — reconhecido pelo Firebase
   if(registeredDevice===deviceId){
+    // Guardar também no localStorage para futuras aberturas sem Firebase
+    if(!jaTenhoEsteCode){
+      myAcceptedCodes.push(code);
+      localStorage.setItem('adj31_meus_codigos',JSON.stringify(myAcceptedCodes));
+    }
     showScreen('s1');
     return;
   }
 
-  // Dispositivo diferente — acesso negado
-  showAcessoNegado('Este convite já foi aberto noutro dispositivo e não pode ser partilhado.');
+  // CASO 4: Dispositivo diferente e não tem no localStorage — terceira pessoa
+  showAcessoNegado('Este convite já foi utilizado e não pode ser partilhado.');
 }
 
 function showAcessoNegado(mensagem){
