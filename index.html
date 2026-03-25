@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>Convite — Abel Dengo Jr | 31 Anos</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -203,8 +200,6 @@ body{display:flex;flex-direction:column;align-items:center}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--off-white);opacity:.15;transition:all .3s}
 .dot.active{background:var(--gold);opacity:1;width:20px;border-radius:3px}
 </style>
-<!-- VERSÃO DO CONVITE — incrementar sempre que actualizar -->
-<meta name="app-version" content="1.0.3">
 </head>
 <body>
 
@@ -1322,32 +1317,7 @@ function updateCountdown(){
   if(cd)cd.textContent=d;if(ch)ch.textContent=String(h).padStart(2,'0');if(cm)cm.textContent=String(m).padStart(2,'0');
 }
 
-// ── AUTO-ACTUALIZAÇÃO ──
-const VERSAO_ACTUAL='1.0.3';
-const VERSAO_KEY='adj31_versao';
-
-function verificarActualizacao(){
-  const versaoGuardada=localStorage.getItem(VERSAO_KEY);
-  if(versaoGuardada!==VERSAO_ACTUAL){
-    // Nova versão detectada — limpar cache e recarregar
-    localStorage.setItem(VERSAO_KEY,VERSAO_ACTUAL);
-    if(versaoGuardada){
-      // Só recarrega se já tinha uma versão anterior (não no primeiro acesso)
-      window.location.reload(true);
-    }
-  }
-}
-
 // INICIAR
-verificarActualizacao();
-
-// Registar Service Worker para actualizações automáticas
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').then(function(reg){
-    reg.update();
-  }).catch(function(){});
-}
-
 initApp();
 </script>
 </body>
